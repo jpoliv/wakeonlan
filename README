@@ -2,28 +2,28 @@
 This is some premature documentation for this project. Feel free to contact
 with comments or additions. (good or bad)
 
-	Jose Pedro Oliveira <jpo[at]di.uminho.pt>
-	Ico Doornekamp <ico[at]edd.dhs.org>
+    José Pedro Oliveira <jpo[at]di.uminho.pt>
+    Ico Doornekamp <ico[at]edd.dhs.org>
 
 
 
 1. What is wakeonlan
 2. How does it work ?
 3. How is it implemented here ?
-4. Known to work hardware 
+4. Known to work hardware
 
 
 
 1. What is wakeonlan
 
 This script sends 'magic packets' to wake-on-lan enabled ethernet
-adapters, in order to switch on the called PC. 
+adapters, in order to switch on the called PC.
 
 
 
 2. How does WOL work ?
 
-WOL is based on the following principle : 
+WOL is based on the following principle :
 
 When the PC shuts down, the NIC still gets power, and keeps listening on
 the network for a 'magic' packet to arrive. This packet must contain a
@@ -33,21 +33,20 @@ certain byte-sequence, but can be encapsulated in any kind of packet
 This program uses UDP for sending the packet. The complete UDP packet, sent
 over an ethernet interface, looks something like this
 
-[ethernet header][IP header][UDP header][Magic sequence][CRCS] 
+[ethernet header][IP header][UDP header][Magic sequence][CRCS]
 
 The only goal of the script is to send this packet over the network. It
 expects no returning data, since the NIC only listens, and does not reply
 anything.
 
-For a more detailed description of the protocol, see the whitepaper
-available in the followin AMD web page:
-	http://www.amd.com/products/npd/overview/20212.html
+For a more detailed description of the protocol, see the white paper
+available in the following AMD web page:
+    http://www.amd.com/products/npd/overview/20212.html
 
 
 
+3. How is it implemented here ?
 
-3. How is it implemented here ? 
- 
 The scripts takes 2 arguments, the MAC-address of the NIC, and an IP
 address. The IP-address is tricky :
 
@@ -57,7 +56,7 @@ For a NIC on your local subnet, use the broadcast-address of this subnet.
 For waking up a PC on a network behind one or more routers, some tricks must
 be used. When the routers forward directed subnet broadcasts, it is possible
 to use the broadcast address of the destination network. The problem is that
-many routers dont forward broadcast packets, so the packet will never arrive
+many routers don't forward broadcast packets, so the packet will never arrive
 at the network.
 
 It is possible to send the packet to the remote net however, by sending it
@@ -70,32 +69,36 @@ on the computer... Feel free to experiment on this.
 
 4. Known-to-work hardware :
 
-
-- 3Com 3c905B Cyclone 100baseTx on an Abit BP6 Motherboard (Ico Doornekamp)
+- 3Com 3c905B Cyclone 100baseTx on an Abit BP6 Motherboard
+  (Ico Doornekamp)
 
 - Intel EtherExpress Pro (i82557 with management chip built onto an IBM
-  IntelliStation motherboard (Sean-Paul Rees)
+  IntelliStation motherboard
+  (Sean-Paul Rees)
 
-- Intel EtherExpress PRO/100+ (chipset 82559) with a PXE boot agent on 
-  an ASUS P2B motherboard (Jose Pedro Oliveira)
+- Intel EtherExpress PRO/100+ (chipset 82559) with a PXE boot agent on
+  an ASUS P2B motherboard
+  (José Pedro Oliveira)
 
-- Motherboard: ASUS TUSL2-C 
+- Motherboard: ASUS TUSL2-C
   BIOS: Award BIOS / Power / Power Up Control / Wake On LAN or PCI Modem [Enable]
   Network card: Intel Pro/100 S Desktop Adapter (chipset 82550)
-	with PXE boot agent v4.0.22
-  (Jos� Pedro Oliveira)
+    with PXE boot agent v4.0.22
+  (José Pedro Oliveira)
 
-- Motherboard: ASUS TUSL2-C 
+- Motherboard: ASUS TUSL2-C
   BIOS: Award BIOS / Power / Power Up Control / Wake On LAN or PCI Modem [Enable]
   Network card: 3Com Fast Etherlink TX 10/100 PCI (3C905C-TXM)
-	with Managed PC Boot Agent (MBA) v4.30 (build 3)
-	Pre-boot eXecution Environment (PXE) v2.20
-  (Jos� Pedro Oliveira)
+    with Managed PC Boot Agent (MBA) v4.30 (build 3)
+    Pre-boot eXecution Environment (PXE) v2.20
+  (José Pedro Oliveira)
 
-- nVidia Corporation nForce2 Ethernet Controller on ASUS and EPOX motherboards. 
+- nVidia Corporation nForce2 Ethernet Controller on ASUS and EPOX motherboards
   (Antoniu-George)
 
-- Macs: Al Powerbook.
+- Macs: All Powerbooks
   Energy Prefs: Wake on ethernet network Administrator access
   (Denis Ahrens)
 
+
+# vim:set ai ts=4 sw=4 sts=4 et:
