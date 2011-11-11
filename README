@@ -1,0 +1,82 @@
+
+This is some premature documentation for this project. Feel free to contact
+with comments or additions. (good or bad)
+
+	Ico Doornekamp
+	ico@edd.dhs.org
+
+
+
+1. What is wakeonlan
+2. How does it work ?
+3. How is it implemented here ?
+4. Known to work hardware 
+
+
+
+1. What is wakeonlan
+
+This script sends 'magic packets' to wake-on-lan enabled ethernet
+adapters, in order to switch on the called PC. 
+
+
+
+2. How does WOL work ?
+
+WOL is based on the following principle : 
+
+When the PC shuts down, the NIC still gets power, and keeps listening on
+the network for a 'magic' packet to arrive. This packet must contain a
+certain byte-sequence, but can be encapsulated in any kind of packet
+(IPX, IP, anything). Take a look at the code for the magic sequence.
+
+This program uses UDP for sending the packet. The complete UDP packet, sent
+over an ethernet interface, looks something like this
+
+[ethernet header][IP header][UDP header][Magic sequence][CRCS] 
+
+The only goal of the script is to send this packet over the network. It
+expects no returning data, since the NIC only listens, and does not reply
+anything.
+
+For a more detailed description of the protocol, see the whitepaper
+available in the followin AMD web page:
+	http://www.amd.com/products/npd/overview/20212.html
+
+
+
+
+3. How is it implemented here ? 
+ 
+The scripts takes 2 arguments, the MAC-address of the NIC, and an IP
+address. The IP-address is tricky :
+
+For a NIC on your local subnet, use the broadcast-address of this subnet.
+(e.g. subnet 192.168.10.0 with netmask 255.255.255.0, use 192.168.10.255)
+
+For waking up a PC on a network behind one or more routers, some tricks must
+be used. When the routers forward directed subnet broadcasts, it is possible
+to use the broadcast address of the destination network. The problem is that
+many routers dont forward broadcast packets, so the packet will never arrive
+at the network.
+
+It is possible to send the packet to the remote net however, by sending it
+to the IP address of another host on that network that's alive at that
+moment. The remote hosts will probably ignore the packet, but it has been
+seen by the listening NIC that's also on the same subnet, and it will turn
+on the computer... Feel free to experiment on this.
+
+
+
+4. Known-to-work hardware :
+
+
+- 3Com 3c905B Cyclone 100baseTx on an Abit BP6 Motherboard (Ico Doornekamp)
+
+- Intel EtherExpress Pro (i82557 with management chip built onto an IBM
+  IntelliStation motherboard (Sean-Paul Rees)
+
+- Intel EtherExpress PRO/100+ (chipset 82559) with a PXE boot agent on 
+  an ASUS P2B motherboard (Jose Pedro Oliveira)
+
+

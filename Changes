@@ -1,0 +1,51 @@
+Revision history for Perl script wakeonlan.
+
+0.10  2000-04-19  ico@edd.dhs.org
+
+	- Inital release. This works for me...
+	- Tested with 3Com 3c905B Cyclone 100baseTx
+
+
+0.20  2000-04-23  ico@edd.dhs.org
+
+	- Major bugfix. When the called system is not known in the ARP-table,
+	  no packets are sent. Solved by allowing broadcast-addresses. Use
+	  broadcast address as IP and all should work....
+	  (Thanks to Egon Kastelijn for making the problem clear to me
+	  <egon.kastelijn@xs4all.nl>)
+
+
+0.30  2000-07-01  ico@edd.dhs.org
+
+	- Some cleaning done by Jose Pedro Oliveira <jpo@di.uminho.pt>: 
+    	1. Forced variable declaration with the pragma 'use strict'
+		2. Removed the bind call (we don't expect to receive any reply)
+		3. Simplified the packet generation
+
+
+0.31  2000-07-17  ico@edd.dhs.org
+
+	- Changes made by Jose Pedro Oliveira <jpo@di.uminho.pt>
+		1. Changed the destination port from the echo (7) to the
+		   discard port (9) in order to avoid the reply from an awaken
+		   computer with an active echo service.
+		2. Removed variables $laddr and $me
+		3. Closed the socket
+		4. Added the variable $VERSION
+		5. Added a link in the README file of the Whitepaper subdirectory
+	- Other changes :
+		6. Completer checks for valid HW-address (Ico Doornekamp)
+		7. Fixed wrong return value on 'die' (Oliver Jones)
+			
+
+0.32  2000-07-23  jpo@di.uminho.pt
+
+	- created by h2xs 1.19 ($ h2xs -A -X -n wakeonlan)
+	- not released
+
+
+0.40  2000-08-01  jpo@di.uminho.pt
+
+	- New command line parameters
+	- Ability to load ethernet addresses from file
+
