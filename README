@@ -2,8 +2,8 @@
 This is some premature documentation for this project. Feel free to contact
 with comments or additions. (good or bad)
 
-	Ico Doornekamp
-	ico@edd.dhs.org
+	Jose Pedro Oliveira <jpo[at]di.uminho.pt>
+	Ico Doornekamp <ico[at]edd.dhs.org>
 
 
 
@@ -79,4 +79,23 @@ on the computer... Feel free to experiment on this.
 - Intel EtherExpress PRO/100+ (chipset 82559) with a PXE boot agent on 
   an ASUS P2B motherboard (Jose Pedro Oliveira)
 
+- Motherboard: ASUS TUSL2-C 
+  BIOS: Award BIOS / Power / Power Up Control / Wake On LAN or PCI Modem [Enable]
+  Network card: Intel Pro/100 S Desktop Adapter (chipset 82550)
+	with PXE boot agent v4.0.22
+  (José Pedro Oliveira)
+
+- Motherboard: ASUS TUSL2-C 
+  BIOS: Award BIOS / Power / Power Up Control / Wake On LAN or PCI Modem [Enable]
+  Network card: 3Com Fast Etherlink TX 10/100 PCI (3C905C-TXM)
+	with Managed PC Boot Agent (MBA) v4.30 (build 3)
+	Pre-boot eXecution Environment (PXE) v2.20
+  (José Pedro Oliveira)
+
+- nVidia Corporation nForce2 Ethernet Controller on ASUS and EPOX motherboards. 
+  (Antoniu-George)
+
+- Macs: Al Powerbook.
+  Energy Prefs: Wake on ethernet network Administrator access
+  (Denis Ahrens)
 

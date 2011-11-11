@@ -49,3 +49,8 @@ Revision history for Perl script wakeonlan.
 	- New command line parameters
 	- Ability to load ethernet addresses from file
 
+0.41  2005-01-27  jpo@di.uminho.pt
+
+	- Minor documentation updates (including several typo corrections).
+
+# vim:set ai ts=4 sw=4:
