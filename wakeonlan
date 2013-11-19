@@ -51,14 +51,14 @@ my %stats = (
 
 ######################################################################
 
-sub isValidPort($) {
+sub isValidPort {
 	my $port = shift;
 
 	return ($port >= PORT_MIN and $port <= PORT_MAX) ? 1 : 0;
 }
 
 
-sub isValidIPAddress($) {
+sub isValidIPAddress {
 	my $ipaddress = shift;
 	my $t = 0;
 
@@ -69,7 +69,7 @@ sub isValidIPAddress($) {
 }
 
 
-sub isValidHardwareAddress($) {
+sub isValidHardwareAddress {
 	my $hwaddr = shift;
 
 	foreach my $re (@hwaddr_regexs) {
@@ -81,7 +81,7 @@ sub isValidHardwareAddress($) {
 
 ######################################################################
 
-sub loadFromCommandLine(@) {
+sub loadFromCommandLine {
 
 	for my $arg (@_) {
 		$stats{total}++;
@@ -98,7 +98,7 @@ sub loadFromCommandLine(@) {
 }
 
 
-sub loadFromFile($) {
+sub loadFromFile {
 	my $filename = shift;
 	my ($hwaddr, $ipaddr, $port);
 
@@ -150,7 +150,6 @@ sub loadFromFile($) {
 # discard port (9).
 #
 
-#sub wake ($$$$) {
 sub wake {
 	my ($sock, $hwaddr, $ipaddr, $port) = @_;
 	my ($raddr, $them, $pkt);
