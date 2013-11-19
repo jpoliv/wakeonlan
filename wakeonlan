@@ -148,7 +148,7 @@ wakeonlan [-h] [-v] [-i IP_address] [-p port] [-f file] [[hardware_address] ...]
 
 =head1 DESCRIPTION
 
-This script sends 'magic packets' to wake-on-lan enabled ethernet adapters and motherboards, in order to switch on the called PC. Be sure to connect the NIC with the motherboard if neccesary, and enable the WOL function in the BIOS.
+This script sends 'magic packets' to wake-on-lan enabled ethernet adapters and motherboards, in order to switch on the called PC. Be sure to connect the NIC with the motherboard if necessary, and enable the WOL function in the BIOS.
 
 The 'magic packet' consists of 6 times 0xFF followed by 16 times the hardware address of the NIC. This sequence can be encapsulated in any kind of packet. This script uses UDP packets.
 
@@ -208,7 +208,7 @@ José Pedro Oliveira <jpo@di.uminho.pt> maintaining and expanding original work 
 
 Copyright (c) 2000-2005 José Pedro Oliveira.
 
-This is free software.  You may modify it and distribute it under Perl's Artistic Licence.  Modified versions must be clearly indicated.
+This is free software.  You may modify it and distribute it under Perl's Artistic License.  Modified versions must be clearly indicated.
 
 =head1 SEE ALSO
 
