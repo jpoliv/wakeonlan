@@ -201,11 +201,11 @@ Using a file as source of hardware and IP addresses:
 
 =head1 AUTHOR
 
-José Pedro Oliveira <jpo@di.uminho.pt> maintaining and expanding original work done by Ico Doornekamp <ico@edd.dhs.org>.
+JosÃ© Pedro Oliveira <jpo@di.uminho.pt> maintaining and expanding original work done by Ico Doornekamp <ico@edd.dhs.org>.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2000-2005 José Pedro Oliveira.
+Copyright (c) 2000-2005 JosÃ© Pedro Oliveira.
 
 This is free software.  You may modify it and distribute it under Perl's Artistic Licence.  Modified versions must be clearly indicated.                                                    
 
