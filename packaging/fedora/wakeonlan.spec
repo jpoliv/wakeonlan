@@ -1,17 +1,16 @@
 Name:           wakeonlan
 Version:        0.41
-Release:        0.fdr.1
-Epoch:          0
+Release:        1%{?dist}
 Summary:        Perl script to wake up computers through Magic Packets
 
 Group:          Development/Libraries
 License:        Artistic
 URL:            http://gsd.di.uminho.pt/jpo/software/wakeonlan/
-Source0:   http://gsd.di.uminho.pt/jpo/software/wakeonlan/wakeonlan-0.41.tar.gz
+Source0:        http://gsd.di.uminho.pt/jpo/software/wakeonlan/wakeonlan-0.41.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
-BuildRequires:  perl >= 1:5.6.1
+BuildRequires:  perl(ExtUtils::MakeMaker)
 
 %description
 This script sends 'magic packets' to wake-on-lan enabled ethernet
@@ -31,11 +30,11 @@ make %{?_smp_mflags}
 rm -rf $RPM_BUILD_ROOT
 make pure_install PERL_INSTALL_ROOT=$RPM_BUILD_ROOT
 find $RPM_BUILD_ROOT -type f -name .packlist -exec rm -f {} ';'
-find $RPM_BUILD_ROOT -type d -depth -exec rmdir {} 2>/dev/null ';'
+find $RPM_BUILD_ROOT -depth -type d -exec rmdir {} 2>/dev/null ';'
 chmod -R u+w $RPM_BUILD_ROOT/*
 
 
-%check || :
+%check
 make test
 
 
@@ -51,6 +50,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Nov 19 2013 Jose Pedro Oliveira - 0.41-1
+- Drop deprecated packaging guidelines (from fedora.us days)
+
 * Fri Jan 28 2005 Jose Pedro Oliveira - 0:0.41-0.fdr.1
 - Update to 0.41.
 
