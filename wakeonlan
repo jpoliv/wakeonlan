@@ -214,3 +214,5 @@ This is free software.  You may modify it and distribute it under Perl's Artisti
 For more information regarding this script and Wakeonlan technology just check the following address http://gsd.di.uminho.pt/jpo/software/wakeonlan/.
 
 =cut
+
+# vim:set ai ts=4 sw=4 sts=4 syntax=perl:
