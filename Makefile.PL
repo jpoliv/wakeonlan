@@ -12,7 +12,8 @@ WriteMakefile
     'PREREQ_PM' => {
                     'Test::More' => 0,
                     'Test::Pod::Coverage' => '1.00',
-                    'Test::Pod' => '1.00'
+                    'Test::Pod' => '1.00',
+                    'Test::Spelling' => 0,
                     },
     ($] ge '5.005') ? (
         'AUTHOR'    => 'José Pedro Oliveira <jpo@di.uminho.pt>',
