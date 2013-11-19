@@ -2,7 +2,7 @@
 #
 # $Id: wakeonlan,v 1.4.2.3 2005/01/27 16:03:54 jpo Exp $
 #
-#########################################################################       
+#########################################################################
 
 use strict;
 use Socket;
@@ -31,7 +31,7 @@ if ($opt_f) { process_file($opt_f); }
 
 foreach (@ARGV) {
 	wake($_, $opt_i, $opt_p);
-} 
+}
 
 #
 # wake
@@ -40,7 +40,7 @@ foreach (@ARGV) {
 # the hardware address of the NIC. This sequence can be encapsulated
 # in any kind of packet, in this case an UDP packet targeted at the
 # discard port (9).
-#                                                                               
+#
 
 sub wake
 {
@@ -127,7 +127,7 @@ Options
         uses file as a source of hardware addresses
 
 See also
-    wakeonlan(1)    
+    wakeonlan(1)
 
 __USAGE__
 }
@@ -136,6 +136,7 @@ __USAGE__
 __END__
 
 # Script documentation
+=encoding utf8
 
 =head1 NAME
 
@@ -207,7 +208,7 @@ José Pedro Oliveira <jpo@di.uminho.pt> maintaining and expanding original work 
 
 Copyright (c) 2000-2005 José Pedro Oliveira.
 
-This is free software.  You may modify it and distribute it under Perl's Artistic Licence.  Modified versions must be clearly indicated.                                                    
+This is free software.  You may modify it and distribute it under Perl's Artistic Licence.  Modified versions must be clearly indicated.
 
 =head1 SEE ALSO
 
