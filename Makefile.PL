@@ -1,16 +1,24 @@
-use ExtUtils::MakeMaker;
-# See lib/ExtUtils/MakeMaker.pm for details of how to influence
-# the contents of the Makefile that is written.
 
-WriteMakefile(
-	'NAME'			=> 'wakeonlan',
-	'VERSION_FROM'	=> 'wakeonlan',		# finds $VERSION
-	'EXE_FILES'		=> [wakeonlan],
-	($] ge '5.005') ? (
-		'AUTHOR'	=> 'Jose Pedro Oliveira (jpo@di.uminho.pt)',
-		'ABSTRACT' 	=> "Script to send 'magic packets' to wakeable computers"
-	) : (
-	),
+use ExtUtils::MakeMaker;
+
+WriteMakefile
+(
+    'INSTALLDIRS' => 'site',
+    'DISTNAME' => 'wakeonlan',
+    'EXE_FILES' => [
+                    'wakeonlan'
+                    ],
+    'VERSION_FROM' => 'wakeonlan',
+    'PREREQ_PM' => {
+                    'Test::More' => 0,
+                    'Test::Pod::Coverage' => '1.00',
+                    'Test::Pod' => '1.00'
+                    },
+    ($] ge '5.005') ? (
+        'AUTHOR'    => 'José Pedro Oliveira <jpo@di.uminho.pt>',
+        'ABSTRACT'  => "Script to send 'magic packets' to wakeable computers"
+    ) : (
+    ),
 );
 
-# vim:set ai ts=4 sw=4:
+# vim:set ai ts=4 sw=4 sts=4 et syntax=perl:

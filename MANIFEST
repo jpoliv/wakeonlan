@@ -5,4 +5,6 @@ README
 wakeonlan
 examples/lab001.wol
 META.yml                                 Module meta-data (added by MakeMaker)
+t/91_pod.t
+t/92_pod_coverage.t
 SIGNATURE
