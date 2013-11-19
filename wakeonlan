@@ -2,36 +2,144 @@
 #
 # $Id: wakeonlan,v 1.4.2.3 2005/01/27 16:03:54 jpo Exp $
 #
-#########################################################################
+######################################################################
 
 use strict;
 use Socket;
-use Getopt::Std;
-use vars qw($VERSION $opt_v $opt_h $opt_i $opt_p $opt_f);
-$VERSION = '0.41';
+use Getopt::Long;
+use Pod::Usage;
 
-my $DEFAULT_IP      = '255.255.255.255';
-my $DEFAULT_PORT    = getservbyname('discard', 'udp');
+our $VERSION = '0.41_90';
+
+use constant {
+	PORT_MIN           => 0,
+	PORT_MAX           => 65535,
+};
 
 #
-# Process the command line
+# Hardware address formats
 #
+our @hwaddr_regexs = (
+	# xx:xx:xx:xx:xx:xx (canonical)
+	'^(?:[\da-f]{1,2}:){5}[\da-f]{1,2}$',
 
-getopts("hvp:i:f:");
+	# xx-xx-xx-xx-xx-xx (Windows)
+	'^(?:[\da-f]{1,2}-){5}[\da-f]{1,2}$',
 
-if ($opt_h) { usage(); exit(0); }
-if ($opt_v) { print "wakeonlan version $VERSION\n"; exit(0); }
-if (!$opt_f and !@ARGV) { usage(); exit(0); }
-if ($opt_i) { $DEFAULT_IP = $opt_i; }		# override default value
-if ($opt_p) { $DEFAULT_PORT = $opt_p; }		# override default value
+	# xxxxxx-xxxxxx (Hewlett-Packard switches)
+	'^[\da-f]{6}-[\da-f]{6}$',
 
-if ($opt_f) { process_file($opt_f); }
+	# xxxxxxxxxxxx (Intel Landesk)
+	'^[\da-f]{12}$',
+);
 
-# The rest of the command line is a list of hardware addresses 
+my $DEFAULT_IP         = '255.255.255.255';
+my $DEFAULT_PORT       = getservbyname('discard', 'udp');
 
-foreach (@ARGV) {
-	wake($_, $opt_i, $opt_p);
+my $verbose            = 1;
+my $dryrun             = 0;
+my $filename           = '';
+
+my @queue              = ();
+
+my %stats = (
+	total              => 0,
+	valid              => 0,
+	invalid            => 0,
+	sent               => 0,
+);
+
+######################################################################
+
+sub isValidPort($) {
+	my $port = shift;
+
+	return ($port >= PORT_MIN and $port <= PORT_MAX) ? 1 : 0;
 }
+
+
+sub isValidIPAddress($) {
+	my $ipaddress = shift;
+	my $t = 0;
+
+	$t += $_ for map { ($_ <= 255)?1:0 }
+			$ipaddress =~ m/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
+
+	return ($t == 4) ? 1 : 0;
+}
+
+
+sub isValidHardwareAddress($) {
+	my $hwaddr = shift;
+
+	foreach my $re (@hwaddr_regexs) {
+		return 1 if ($hwaddr =~ m/$re/i);
+	}
+
+	return 0;
+}
+
+######################################################################
+
+sub loadFromCommandLine(@) {
+
+	for my $arg (@_) {
+		$stats{total}++;
+
+		if (! isValidHardwareAddress($arg) ) {
+			warn "Invalid hardware address: $arg\n";
+			$stats{invalid}++;
+			next;
+		}
+
+		$stats{valid}++;
+		push @queue, [ $arg, $DEFAULT_IP, $DEFAULT_PORT ];
+	}
+}
+
+
+sub loadFromFile($) {
+	my $filename = shift;
+	my ($hwaddr, $ipaddr, $port);
+
+	open (my $FILE, '<', $filename) or die "open : $!";
+	while(<$FILE>) {
+		next if /^\s*#/;		# ignore comment lines
+		next if /^\s*$/;		# ignore empty lines
+
+		$stats{total}++;
+
+		chomp;
+		($hwaddr, $ipaddr, $port) = split;
+
+		if (! isValidHardwareAddress($hwaddr) ) {
+			warn "Invalid hardware address: $hwaddr\n";
+			$stats{invalid}++;
+			next;
+		}
+
+		$ipaddr = $DEFAULT_IP unless defined($ipaddr);
+		if (! isValidIPAddress($ipaddr) ) {
+			warn "Invalid IP address: $ipaddr\n";
+			$stats{invalid}++;
+			next;
+		}
+
+		$port = $DEFAULT_PORT unless defined($port);
+		if (! isValidPort($port) ) {
+			warn "Invalid port number: $port\n";
+			$stats{invalid}++;
+			next;
+		}
+
+		$stats{valid}++;
+		push @queue, [ $hwaddr, $ipaddr, $port ];
+	}
+	close $FILE;
+}
+
+
+######################################################################
 
 #
 # wake
@@ -42,98 +150,135 @@ foreach (@ARGV) {
 # discard port (9).
 #
 
-sub wake
-{
-	my $hwaddr  = shift;
-	my $ipaddr  = shift || $DEFAULT_IP;
-	my $port    = shift || $DEFAULT_PORT;
+#sub wake ($$$$) {
+sub wake {
+	my ($sock, $hwaddr, $ipaddr, $port) = @_;
+	my ($raddr, $them, $pkt);
+	#
+	# Expects hardware address in canonical form (xx:xx:xx:xx:xx:xx)
+	#
 
-	my ($raddr, $them, $proto);
-	my ($hwaddr_re, $pkt);
-	
-	# Validate hardware address (ethernet address)
-
-	$hwaddr_re = join(':', ('[0-9A-Fa-f]{1,2}') x 6);
-	if ($hwaddr !~ m/^$hwaddr_re$/) {
-		warn "Invalid hardware address: $hwaddr\n";
-		return undef;
-	}
-
-	# Generate magic sequence
-
+	#
+	# Generate the magic sequence
+	#
 	foreach (split /:/, $hwaddr) {
 		$pkt .= chr(hex($_));
 	}
 	$pkt = chr(0xFF) x 6 . $pkt x 16;
 
-	# Allocate socket and send packet
+	#
+	# Send packet
+	#
 
+	# Patch by Eugenio Jarosiewicz <ej0 at mac.com>
+	# $raddr = inet_aton($ipaddr);
+	#
 	$raddr = gethostbyname($ipaddr);
 	$them = pack_sockaddr_in($port, $raddr);
-	$proto = getprotobyname('udp');
 
-	socket(S, AF_INET, SOCK_DGRAM, $proto) or die "socket : $!";
-	setsockopt(S, SOL_SOCKET, SO_BROADCAST, 1) or die "setsockopt : $!";
+	print "Sending magic packet to $ipaddr:$port with payload $hwaddr\n"
+		if $verbose;
 
-	print "Sending magic packet to $ipaddr:$port with $hwaddr\n";
+	#send($sock, $pkt, 0, $them) or die "send : $!";
+	send($sock, $pkt, 0, $them) unless $dryrun;
 
-	send(S, $pkt, 0, $them) or die "send : $!";
-	close S;
 }
 
-#
-# process_file
-#
 
-sub process_file {
-	my $filename = shift;
-	my ($hwaddr, $ipaddr, $port);
+sub sendMagicPackets {
 
-	open (my $FILE, '<', $filename) or die "open : $!";
-	while(<$FILE>) {
-		next if /^\s*#/;		# ignore comments
-		next if /^\s*$/;		# ignore empty lines
-
-		chomp;
-		($hwaddr, $ipaddr, $port) = split;
-
-		wake($hwaddr, $ipaddr, $port);
+	if (! @queue) {
+		warn "Nothing to do!\n";
+		return;
 	}
-	close $FILE;
+
+	my $sock;
+	my $proto = getprotobyname('udp');
+
+	socket($sock, AF_INET, SOCK_DGRAM, $proto) or die "socket : $!";
+	setsockopt($sock, SOL_SOCKET, SO_BROADCAST, 1) or die "setsockopt : $!";
+
+	for my $ref (@queue) {
+
+		wake($sock, $ref->[0], $ref->[1], $ref->[2]);
+
+		$stats{sent}++;
+	}
+
+	close $sock;
 }
+
+######################################################################
+# main
+######################################################################
+
+#
+# Process the command line
+#
+
+GetOptions(
+	"h|help"       => sub { pod2usage( -exitval => 0, -verbose => 1); },
+	"v|version"    => sub { print "wakeonlan $VERSION\n"; exit(0); },
+	"q|quiet"      => sub { $verbose = 0; },
+	"i|ip=s"       => \$DEFAULT_IP,
+	"p|port=i"     => \$DEFAULT_PORT,
+	"f|file=s"     => \$filename,
+	"n|dry-run"    => sub { $dryrun = 1; },
+) or pod2usage( -exitval => 1, -verbose => 1);
 
 
 #
-# Usage
+# Validate information
+#
+#
+if (! isValidPort($DEFAULT_PORT)) {
+	warn "Invalid default port number: $DEFAULT_PORT\n";
+	exit(2);
+}
+
+if (! isValidIPAddress($DEFAULT_IP)) {
+	warn "Invalid default IP address: $DEFAULT_IP\n";
+	exit(3);
+}
+
+if ($filename and ! -f $filename) {
+	warn "Invalid filename: $filename\n";
+	exit(4);
+}
+
+#
+# Nothing to do ?
+#
+if (!$filename and !@ARGV) { pod2usage( -exitval => 0, -verbose => 1); };
+
+
+#
+# Load hardware addresses
 #
 
-sub usage {
-print <<__USAGE__;
-Usage
-    wakeonlan [-h] [-v] [-i IP_address] [-p port] [-f file] [[hardware_address] ...]
+loadFromCommandLine(@ARGV);
+loadFromFile($filename) if $filename;
 
-Options
-    -h
-        this information
-    -v
-        displays the script version
-    -i ip_address
-        set the destination IP address
-        default: 255.255.255.255 (the limited broadcast address)
-    -p port
-        set the destination port
-        default: 9 (the discard port)
-    -f file 
-        uses file as a source of hardware addresses
+# print Dumper(@queue);
 
-See also
-    wakeonlan(1)
+sendMagicPackets();
 
-__USAGE__
+#
+# Print statistics
+#
+if ($verbose) {
+	printf "Hardware addresses: <total=%d, valid=%d, invalid=%d>\n",
+		$stats{total}, $stats{valid}, $stats{invalid};
+	printf "Magic packets: <sent=%d>\n", $stats{sent};
 }
+
+exit 0;
+
+##########
 
 
 __END__
+
 
 # Script documentation
 =encoding utf8
@@ -144,11 +289,11 @@ wakeonlan - Perl script to wake up computers
 
 =head1 SYNOPSIS
 
-wakeonlan [-h] [-v] [-i IP_address] [-p port] [-f file] [[hardware_address] ...]
+wakeonlan [-h|--help] [-v|--version] [-q|--quiet] [-n|--dry-run] [-i|--ip IP_address] [-p|--port port] [-f|--file file_name] [[hardware_address] ...]
 
 =head1 DESCRIPTION
 
-This script sends 'magic packets' to wake-on-lan enabled ethernet adapters and motherboards, in order to switch on the called PC. Be sure to connect the NIC with the motherboard if necessary, and enable the WOL function in the BIOS.
+This script sends 'magic packets' to wake-on-lan enabled ethernet adapters and motherboards, in order to switch on the called PC. Be sure to connect the NIC with the motherboard if necessary, and to enable the WOL function in the BIOS.
 
 The 'magic packet' consists of 6 times 0xFF followed by 16 times the hardware address of the NIC. This sequence can be encapsulated in any kind of packet. This script uses UDP packets.
 
@@ -156,27 +301,35 @@ The 'magic packet' consists of 6 times 0xFF followed by 16 times the hardware ad
 
 =over
 
-=item B<-h>
+=item B<-h, --help>
 
 Displays the help information.
 
-=item B<-v>
+=item B<-v, --version>
 
 Displays the script version.
 
-=item B<-i ip_address>
+=item B<-i, --ip=IP_address>
 
 Destination IP address. Unless you have static ARP tables you should
 use some kind of broadcast address (the broadcast address of the network where the computer resides or the limited broadcast address). Default: 255.255.255.255 (the limited broadcast address).
 
-=item B<-p port>
+=item B<-p, --port=port>
 
 Destination port. Default: 9 (the discard port).
 
-=item B<-f file>
+=item B<-f, --file=file_name>
 
 File with hardware addresses of wakeable computers. For an example check
 the file lab001.wol in the examples subdirectory.
+
+=item B<-q, --quiet>
+
+Quiet mode.
+
+=item B<-n, --dry-run>
+
+Print the commands that would be executed, but do not execute them.
 
 =back
 
@@ -206,7 +359,7 @@ José Pedro Oliveira <jpo@di.uminho.pt> maintaining and expanding original work 
 
 =head1 COPYRIGHT
 
-Copyright (c) 2000-2005 José Pedro Oliveira.
+Copyright (c) 2000-2009 José Pedro Oliveira.
 
 This is free software.  You may modify it and distribute it under Perl's Artistic License.  Modified versions must be clearly indicated.
 
