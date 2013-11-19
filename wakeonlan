@@ -89,8 +89,8 @@ sub process_file {
 	my $filename = shift;
 	my ($hwaddr, $ipaddr, $port);
 
-	open (F, "<$filename") or die "open : $!";
-	while(<F>) {
+	open (my $FILE, '<', $filename) or die "open : $!";
+	while(<$FILE>) {
 		next if /^\s*#/;		# ignore comments
 		next if /^\s*$/;		# ignore empty lines
 
@@ -99,7 +99,7 @@ sub process_file {
 
 		wake($hwaddr, $ipaddr, $port);
 	}
-	close F;
+	close $FILE;
 }
 
 
