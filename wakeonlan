@@ -146,7 +146,7 @@ sub loadFromFile {
 			next;
 		}
 
-		if defined($ddns){
+		if (defined($ddns)){
 			my $t = $DEFAULT_IP;
 			if (! isValidDDNS($ddns)){
 				warn "Invalid DDNS Domain: $ddns\n";;
