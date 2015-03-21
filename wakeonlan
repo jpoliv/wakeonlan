@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 #
-# $Id: wakeonlan,v 1.4.2.3 2005/01/27 16:03:54 jpo Exp $
+# $Id: wakeonlan,v 1.4.2.5 2005/03/21 11:29:54 jpo Exp $
 #
 ######################################################################
 
@@ -9,7 +9,7 @@ use Socket;
 use Getopt::Long;
 use Pod::Usage;
 
-our $VERSION = '0.41_90';
+our $VERSION = '0.41_92';
 
 use constant {
 	PORT_MIN           => 0,
