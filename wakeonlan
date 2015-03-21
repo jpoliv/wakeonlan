@@ -38,6 +38,7 @@ my $DEFAULT_PORT       = getservbyname('discard', 'udp');
 
 my $verbose            = 1;
 my $dryrun             = 0;
+my $ddns               = '';
 my $filename           = '';
 
 my @queue              = ();
@@ -66,6 +67,19 @@ sub isValidIPAddress {
 			$ipaddress =~ m/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
 
 	return ($t == 4) ? 1 : 0;
+}
+
+
+sub isValidDDNS {
+	my $hostaddr = shift;
+
+	return 0 if ! ($hostaddr =~ m/^(https?:\/\/)?\w+(\.\w+)+\/?$/i);
+
+	my $t = gethostbyname($hostaddr);
+	return 0 if ! isValidIPAddress(inet_ntoa($t));
+	$DEFAULT_IP = inet_ntoa($t);
+
+	return  1;
 }
 
 
@@ -221,6 +235,7 @@ GetOptions(
 	"q|quiet"      => sub { $verbose = 0; },
 	"i|ip=s"       => \$DEFAULT_IP,
 	"p|port=i"     => \$DEFAULT_PORT,
+	"d|ddns=s"     => \$ddns,
 	"f|file=s"     => \$filename,
 	"n|dry-run"    => sub { $dryrun = 1; },
 ) or pod2usage( -exitval => 1, -verbose => 1);
@@ -243,6 +258,11 @@ if (! isValidIPAddress($DEFAULT_IP)) {
 if ($filename and ! -f $filename) {
 	warn "Invalid filename: $filename\n";
 	exit(4);
+}
+
+if ($ddns and ! isValidDDNS($ddns)) {
+	warn "Invalid host address: $ddns\n";
+	exit(5);
 }
 
 #
@@ -288,7 +308,7 @@ wakeonlan - Perl script to wake up computers
 
 =head1 SYNOPSIS
 
-wakeonlan [-h|--help] [-v|--version] [-q|--quiet] [-n|--dry-run] [-i|--ip IP_address] [-p|--port port] [-f|--file file_name] [[hardware_address] ...]
+wakeonlan [-h|--help] [-v|--version] [-q|--quiet] [-n|--dry-run] [-i|--ip IP_address] [-d|--ddns host] [-p|--port port] [-f|--file file_name] [[hardware_address] ...]
 
 =head1 DESCRIPTION
 
@@ -312,6 +332,10 @@ Displays the script version.
 
 Destination IP address. Unless you have static ARP tables you should
 use some kind of broadcast address (the broadcast address of the network where the computer resides or the limited broadcast address). Default: 255.255.255.255 (the limited broadcast address).
+
+=item B<-d, --ddns=host>
+
+Destination host. Unless you have DDNS Domain. Default: '' (This will change the IP Address).
 
 =item B<-p, --port=port>
 
