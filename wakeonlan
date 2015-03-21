@@ -114,7 +114,7 @@ sub loadFromCommandLine {
 
 sub loadFromFile {
 	my $filename = shift;
-	my ($hwaddr, $ipaddr, $port);
+	my ($hwaddr, $ipaddr, $port, $ddns);
 
 	open (my $FILE, '<', $filename) or die "open : $!";
 	while(<$FILE>) {
@@ -124,7 +124,7 @@ sub loadFromFile {
 		$stats{total}++;
 
 		chomp;
-		($hwaddr, $ipaddr, $port) = split;
+		($hwaddr, $ipaddr, $port, $ddns) = split;
 
 		if (! isValidHardwareAddress($hwaddr) ) {
 			warn "Invalid hardware address: $hwaddr\n";
@@ -144,6 +144,17 @@ sub loadFromFile {
 			warn "Invalid port number: $port\n";
 			$stats{invalid}++;
 			next;
+		}
+
+		if defined($ddns){
+			my $t = $DEFAULT_IP;
+			if (! isValidDDNS($ddns)){
+				warn "Invalid DDNS Domain: $ddns\n";;
+				$stats{invalid}++;
+				next;
+				}
+			$ipaddr = $DEFAULT_IP;
+			$DEFAULT_IP = $t;
 		}
 
 		$stats{valid}++;
