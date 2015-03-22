@@ -7,15 +7,17 @@
 # - comment lines are ignored (lines starting with a hash mark '#')
 # - other lines are considered valid records and can have 3 columns:
 #
-#       Hardware address, IP address, destination port
+#       Hardware address, IP address, destination port, DDNS domain
 #
-#   the last two are optional, in which case the following defaults
+#   the last three are optional, in which case the following defaults
 #   are used:
 #
 #       IP address: 255.255.255.255 (the limited broadcast address)
 #       port:       9 (the discard port)
+#       DDNS domain: '' (this will replace IP address)
 #
 
+07:08:09:0A:0B:0C	255.255.255.255		9	amazon.com
 01:02:03:04:05:06	192.168.1.255		9
 07:09:09:0A:0B:0C	255.255.255.255
 0D:0E:0F:00:10:11

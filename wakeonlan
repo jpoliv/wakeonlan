@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 #
-# $Id: wakeonlan,v 1.4.2.3 2005/01/27 16:03:54 jpo Exp $
+# $Id: wakeonlan,v 1.4.2.5 2015/03/21 14:04:34 jpo Exp $
 #
 ######################################################################
 
@@ -9,7 +9,7 @@ use Socket;
 use Getopt::Long;
 use Pod::Usage;
 
-our $VERSION = '0.41_90';
+our $VERSION = '0.41_92';
 
 use constant {
 	PORT_MIN           => 0,
@@ -38,6 +38,7 @@ my $DEFAULT_PORT       = getservbyname('discard', 'udp');
 
 my $verbose            = 1;
 my $dryrun             = 0;
+my $ddns               = '';
 my $filename           = '';
 
 my @queue              = ();
@@ -66,6 +67,19 @@ sub isValidIPAddress {
 			$ipaddress =~ m/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
 
 	return ($t == 4) ? 1 : 0;
+}
+
+
+sub isValidDDNS {
+	my $hostaddr = shift;
+
+	return 0 if ! ($hostaddr =~ m/^(https?:\/\/)?\w+(\.\w+)+\/?$/i);
+
+	my $t = gethostbyname($hostaddr);
+	return 0 if ! isValidIPAddress(inet_ntoa($t));
+	$DEFAULT_IP = inet_ntoa($t);
+
+	return  1;
 }
 
 
@@ -100,7 +114,7 @@ sub loadFromCommandLine {
 
 sub loadFromFile {
 	my $filename = shift;
-	my ($hwaddr, $ipaddr, $port);
+	my ($hwaddr, $ipaddr, $port, $ddns);
 
 	open (my $FILE, '<', $filename) or die "open : $!";
 	while(<$FILE>) {
@@ -110,7 +124,7 @@ sub loadFromFile {
 		$stats{total}++;
 
 		chomp;
-		($hwaddr, $ipaddr, $port) = split;
+		($hwaddr, $ipaddr, $port, $ddns) = split;
 
 		if (! isValidHardwareAddress($hwaddr) ) {
 			warn "Invalid hardware address: $hwaddr\n";
@@ -130,6 +144,17 @@ sub loadFromFile {
 			warn "Invalid port number: $port\n";
 			$stats{invalid}++;
 			next;
+		}
+
+		if (defined($ddns)){
+			my $t = $DEFAULT_IP;
+			if (! isValidDDNS($ddns)){
+				warn "Invalid DDNS Domain: $ddns\n";;
+				$stats{invalid}++;
+				next;
+				}
+			$ipaddr = $DEFAULT_IP;
+			$DEFAULT_IP = $t;
 		}
 
 		$stats{valid}++;
@@ -221,6 +246,7 @@ GetOptions(
 	"q|quiet"      => sub { $verbose = 0; },
 	"i|ip=s"       => \$DEFAULT_IP,
 	"p|port=i"     => \$DEFAULT_PORT,
+	"d|ddns=s"     => \$ddns,
 	"f|file=s"     => \$filename,
 	"n|dry-run"    => sub { $dryrun = 1; },
 ) or pod2usage( -exitval => 1, -verbose => 1);
@@ -243,6 +269,11 @@ if (! isValidIPAddress($DEFAULT_IP)) {
 if ($filename and ! -f $filename) {
 	warn "Invalid filename: $filename\n";
 	exit(4);
+}
+
+if ($ddns and ! isValidDDNS($ddns)) {
+	warn "Invalid host address: $ddns\n";
+	exit(5);
 }
 
 #
@@ -288,7 +319,7 @@ wakeonlan - Perl script to wake up computers
 
 =head1 SYNOPSIS
 
-wakeonlan [-h|--help] [-v|--version] [-q|--quiet] [-n|--dry-run] [-i|--ip IP_address] [-p|--port port] [-f|--file file_name] [[hardware_address] ...]
+wakeonlan [-h|--help] [-v|--version] [-q|--quiet] [-n|--dry-run] [-i|--ip IP_address] [-d|--ddns host] [-p|--port port] [-f|--file file_name] [[hardware_address] ...]
 
 =head1 DESCRIPTION
 
@@ -312,6 +343,10 @@ Displays the script version.
 
 Destination IP address. Unless you have static ARP tables you should
 use some kind of broadcast address (the broadcast address of the network where the computer resides or the limited broadcast address). Default: 255.255.255.255 (the limited broadcast address).
+
+=item B<-d, --ddns=host>
+
+Destination host. Unless you have DDNS Domain. Default: '' (This will change the IP Address).
 
 =item B<-p, --port=port>
 
@@ -346,6 +381,11 @@ Using a subnet broadcast address:
 Using another destination port:
 
     $ wakeonlan -i 192.168.1.255 -p 1234 01:02:03:04:05:06
+
+Using another DDNS:
+
+    $ wakeonlan -d www.google.com 01:02:03:04:05:06
+    $ wakeonlan -i 192.168.1.255 -d www.google.com 01:02:03:04:05:06  # -i won't work!
 
 Using a file as source of hardware and IP addresses:
 
