@@ -5,7 +5,9 @@
 ######################################################################
 
 use strict;
-use Socket;
+use IO::Socket::IP;
+use Socket qw(IPPROTO_UDP :addrinfo);
+use Socket6 qw(inet_ntop);
 use Getopt::Long;
 use Pod::Usage;
 
@@ -33,7 +35,7 @@ our @hwaddr_regexs = (
 	'^[\da-f]{12}$',
 );
 
-my $DEFAULT_IP         = '255.255.255.255';
+my $DEFAULT_TARGET     = '255.255.255.255';
 my $DEFAULT_PORT       = getservbyname('discard', 'udp');
 
 my $verbose            = 1;
@@ -47,6 +49,7 @@ my %stats = (
 	valid              => 0,
 	invalid            => 0,
 	sent               => 0,
+	failed             => 0,
 );
 
 ######################################################################
@@ -58,14 +61,12 @@ sub isValidPort {
 }
 
 
-sub isValidIPAddress {
-	my $ipaddress = shift;
-	my $t = 0;
+sub isValidTarget {
+	my $target = shift;
 
-	$t += $_ for map { ($_ <= 255)?1:0 }
-			$ipaddress =~ m/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
+	# TODO: check if target is a valid domain, IPv4 address or IPv6 address
 
-	return ($t == 4) ? 1 : 0;
+	return 1;
 }
 
 
@@ -93,14 +94,14 @@ sub loadFromCommandLine {
 		}
 
 		$stats{valid}++;
-		push @queue, [ $arg, $DEFAULT_IP, $DEFAULT_PORT ];
+		push @queue, [ $arg, $DEFAULT_TARGET, $DEFAULT_PORT ];
 	}
 }
 
 
 sub loadFromFile {
 	my $filename = shift;
-	my ($hwaddr, $ipaddr, $port);
+	my ($hwaddr, $target, $port);
 
 	open (my $FILE, '<', $filename) or die "open : $!";
 	while(<$FILE>) {
@@ -110,7 +111,7 @@ sub loadFromFile {
 		$stats{total}++;
 
 		chomp;
-		($hwaddr, $ipaddr, $port) = split;
+		($hwaddr, $target, $port) = split;
 
 		if (! isValidHardwareAddress($hwaddr) ) {
 			warn "Invalid hardware address: $hwaddr\n";
@@ -118,9 +119,9 @@ sub loadFromFile {
 			next;
 		}
 
-		$ipaddr = $DEFAULT_IP unless defined($ipaddr);
-		if (! isValidIPAddress($ipaddr) ) {
-			warn "Invalid IP address: $ipaddr\n";
+		$target = $DEFAULT_TARGET unless defined($target);
+		if (! isValidTarget($target) ) {
+			warn "Invalid target: $target\n";
 			$stats{invalid}++;
 			next;
 		}
@@ -133,7 +134,7 @@ sub loadFromFile {
 		}
 
 		$stats{valid}++;
-		push @queue, [ $hwaddr, $ipaddr, $port ];
+		push @queue, [ $hwaddr, $target, $port ];
 	}
 	close $FILE;
 }
@@ -151,7 +152,7 @@ sub loadFromFile {
 #
 
 sub wake {
-	my ($sock, $hwaddr, $ipaddr, $port) = @_;
+	my ($hwaddr, $target, $port) = @_;
 	my ($raddr, $them, $pkt);
 	#
 	# Expects hardware address in canonical form (xx:xx:xx:xx:xx:xx)
@@ -169,18 +170,48 @@ sub wake {
 	# Send packet
 	#
 
-	# Patch by Eugenio Jarosiewicz <ej0 at mac.com>
-	# $raddr = inet_aton($ipaddr);
-	#
-	$raddr = gethostbyname($ipaddr);
-	$them = pack_sockaddr_in($port, $raddr);
+	my ($err_gai, @res) = getaddrinfo($target, $port, { family => AF_UNSPEC, protocol => IPPROTO_UDP } );
 
-	print "Sending magic packet to $ipaddr:$port with payload $hwaddr\n"
+	if ($err_gai) {
+		warn "getaddrinfo failed on $target with port $port: $err_gai";
+		return 0;
+	}
+
+	if (! @res) {
+		warn "failed to resolve $target with port $port";
+		return 0;
+	}
+
+	my ($addr, $sock);
+
+	foreach my $ai (@res) {
+		my $candidate = IO::Socket->new();
+
+		$candidate->socket($ai->{family}, $ai->{socktype}, $ai->{protocol}) or next;
+
+		$sock = $candidate;
+		$addr = $ai->{addr};
+		last;
+	}
+
+	if (! $sock) {
+		warn "failed to create socket for $target with port $port";
+		return 0;
+	}
+
+	my ($gni_err, $ipaddr) = getnameinfo($addr, NI_NUMERICHOST, NIx_NOSERV);
+
+	if ($gni_err) {
+		$ipaddr = $target;
+	}
+
+	print "Sending magic packet to $ipaddr on port $port with payload $hwaddr\n"
 		if $verbose;
 
-	#send($sock, $pkt, 0, $them) or die "send : $!";
-	send($sock, $pkt, 0, $them) unless $dryrun;
+	$sock->send($pkt, 0, $addr) unless $dryrun;
+	$sock->shutdown(SHUT_RDWR);
 
+	return 1;
 }
 
 
@@ -191,20 +222,14 @@ sub sendMagicPackets {
 		return;
 	}
 
-	my $sock;
-	my $proto = getprotobyname('udp');
-
-	socket($sock, AF_INET, SOCK_DGRAM, $proto) or die "socket : $!";
-	setsockopt($sock, SOL_SOCKET, SO_BROADCAST, 1) or die "setsockopt : $!";
-
 	for my $ref (@queue) {
+		if (wake($ref->[0], $ref->[1], $ref->[2])) {
+			$stats{sent}++;
+			next;
+		}
 
-		wake($sock, $ref->[0], $ref->[1], $ref->[2]);
-
-		$stats{sent}++;
+		$stats{failed}++;
 	}
-
-	close $sock;
 }
 
 ######################################################################
@@ -219,7 +244,7 @@ GetOptions(
 	"h|help"       => sub { pod2usage( -exitval => 0, -verbose => 1); },
 	"v|version"    => sub { print "wakeonlan $VERSION\n"; exit(0); },
 	"q|quiet"      => sub { $verbose = 0; },
-	"i|ip=s"       => \$DEFAULT_IP,
+	"i|ip=s"       => \$DEFAULT_TARGET,
 	"p|port=i"     => \$DEFAULT_PORT,
 	"f|file=s"     => \$filename,
 	"n|dry-run"    => sub { $dryrun = 1; },
@@ -235,8 +260,8 @@ if (! isValidPort($DEFAULT_PORT)) {
 	exit(2);
 }
 
-if (! isValidIPAddress($DEFAULT_IP)) {
-	warn "Invalid default IP address: $DEFAULT_IP\n";
+if (! isValidTarget($DEFAULT_TARGET)) {
+	warn "Invalid default target: $DEFAULT_TARGET\n";
 	exit(3);
 }
 
@@ -268,7 +293,7 @@ sendMagicPackets();
 if ($verbose) {
 	printf "Hardware addresses: <total=%d, valid=%d, invalid=%d>\n",
 		$stats{total}, $stats{valid}, $stats{invalid};
-	printf "Magic packets: <sent=%d>\n", $stats{sent};
+	printf "Magic packets: <sent=%d, failed=%d>\n", $stats{sent}, $stats{failed};
 }
 
 exit 0;
