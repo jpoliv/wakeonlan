@@ -199,6 +199,8 @@ sub wake {
 		return 0;
 	}
 
+	setsockopt($sock, SOL_SOCKET, SO_BROADCAST, 1) or die "setsockopt : $!";
+
 	my ($gni_err, $ipaddr) = getnameinfo($addr, NI_NUMERICHOST, NIx_NOSERV);
 
 	if ($gni_err) {
