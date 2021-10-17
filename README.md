@@ -3,8 +3,11 @@
 This is some premature documentation for this project. Feel free to contact
 with comments or additions (good or bad).
 
-    José Pedro Oliveira <jpo[at]di.uminho.pt>
-    Ico Doornekamp <ico[at]edd.dhs.org>
+Authors:
+* José Pedro Oliveira ~~<jpo[at]di.uminho.pt>~~ <jose.p.oliveira.oss[at]gmail.com>
+* Ico Doornekamp <ico[at]edd.dhs.org>
+
+Table of contents:
 
 1. [What is wakeonlan](#1-what-is-wakeonlan)
 2. [How does WOL work ?](#2-how-does-wol-work)
@@ -28,7 +31,9 @@ certain byte-sequence, but can be encapsulated in any kind of packet
 This program uses UDP for sending the packet. The complete UDP packet, sent
 over an ethernet interface, looks something like this
 
-    [Ethernet header][IP header][UDP header][Magic sequence][CRCS]
+```text
+[Ethernet header][IP header][UDP header][Magic sequence][CRCS]
+```
 
 The only goal of the script is to send this packet over the network. It
 expects no returning data, since the NIC only listens, and does not reply
