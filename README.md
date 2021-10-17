@@ -42,8 +42,8 @@ For a more detailed description of the Magic Packet technology, see the
 AMD white paper available at the following addresses:
     http://www.amd.com/products/npd/overview/20212.html (broken link)
     http://support.amd.com/us/Embedded_TechDocs/20213.pdf (broken link)
-    http://web.archive.org/web/20000414213425/http://www.amd.com/products/npd/overview/20212.html (courtesy of the Internet Archive)
-    http://web.archive.org/web/20120113152607/http://support.amd.com/us/Embedded_TechDocs/20213.pdf (courtesy of the Internet Archive)
+    https://web.archive.org/web/20000414213425/http://www.amd.com/products/npd/overview/20212.html (courtesy of the Internet Archive)
+    https://web.archive.org/web/20120113152607/http://support.amd.com/us/Embedded_TechDocs/20213.pdf (courtesy of the Internet Archive)
 
 
 #### 3. How is it implemented here ?
