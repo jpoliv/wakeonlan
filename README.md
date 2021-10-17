@@ -4,6 +4,7 @@ This is some premature documentation for this project. Feel free to contact
 with comments or additions (good or bad).
 
 Authors:
+
 * José Pedro Oliveira ~~<jpo[at]di.uminho.pt>~~ <jose.p.oliveira.oss[at]gmail.com>
 * Ico Doornekamp <ico[at]edd.dhs.org>
 
@@ -13,6 +14,7 @@ Table of contents:
 2. [How does WOL work ?](#2-how-does-wol-work)
 3. [How is it implemented here ?](#3-how-is-it-implemented-here)
 4. [Known to work hardware](#4-known-to-work-hardware)
+5. [References](#5-references)
 
 ## 1. What is wakeonlan
 
@@ -99,5 +101,12 @@ on the computer... Feel free to experiment on this.
 * Macs: All Powerbooks;
   Energy Prefs: Wake on ethernet network Administrator access;
   (Denis Ahrens)
+
+## 5. References
+
+* [AMD - Magic Packet Technology](https://web.archive.org/web/20000414213425/http://www.amd.com/products/npd/overview/20212.html) - Internet Archive link
+* [AMD - Magic Packet Technology - White paper](https://web.archive.org/web/20120113152607/http://support.amd.com/us/Embedded_TechDocs/20213.pdf) - Internet Archive link
+* [Old wakeonlan project page](https://web.archive.org/web/20140120212300/http://gsd.di.uminho.pt:80/jpo/software/wakeonlan/) - Internet Archive link
+* [Old Wake on LAN mini HOWTO](https://web.archive.org/web/20080321144028/http://gsd.di.uminho.pt/jpo/software/wakeonlan/mini-howto/wol-mini-howto.html) - Internet Archive link
 
 <!-- vim:set ai ts=4 sw=4 sts=4 et: -->
