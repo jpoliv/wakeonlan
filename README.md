@@ -100,5 +100,4 @@ on the computer... Feel free to experiment on this.
    Energy Prefs: Wake on ethernet network Administrator access;
    (Denis Ahrens)
 
-
-# vim:set ai ts=4 sw=4 sts=4 et:
+<!-- vim:set ai ts=4 sw=4 sts=4 et: -->
