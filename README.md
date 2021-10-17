@@ -41,13 +41,8 @@ The only goal of the script is to send this packet over the network. It
 expects no returning data, since the NIC only listens, and does not reply
 anything.
 
-For a more detailed description of the Magic Packet technology, see the
-AMD white paper available at the following addresses:
-
-* <http://www.amd.com/products/npd/overview/20212.html> (broken link)
-* <http://support.amd.com/us/Embedded_TechDocs/20213.pdf> (broken link)
-* <https://web.archive.org/web/20000414213425/http://www.amd.com/products/npd/overview/20212.html> (courtesy of the Internet Archive)
-* <https://web.archive.org/web/20120113152607/http://support.amd.com/us/Embedded_TechDocs/20213.pdf> (courtesy of the Internet Archive)
+For a more detailed description of the Magic Packet technology, check the
+AMD resources listed in the [references](#5-references) section.
 
 ## 3. How is it implemented here ?
 
