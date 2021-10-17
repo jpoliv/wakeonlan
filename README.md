@@ -1,5 +1,4 @@
-wakeonlan
-=========
+# wakeonlan
 
 This is some premature documentation for this project. Feel free to contact
 with comments or additions (good or bad).
@@ -7,20 +6,17 @@ with comments or additions (good or bad).
     José Pedro Oliveira <jpo[at]di.uminho.pt>
     Ico Doornekamp <ico[at]edd.dhs.org>
 
-
 1. What is wakeonlan
 2. How does it work ?
 3. How is it implemented here ?
 4. Known to work hardware
 
-
-#### 1. What is wakeonlan
+## 1. What is wakeonlan
 
 This script sends 'magic packets' to wake-on-lan enabled ethernet
 adapters, in order to switch on the called PC.
 
-
-#### 2. How does WOL work ?
+## 2. How does WOL work ?
 
 WOL is based on the following principle :
 
@@ -40,13 +36,13 @@ anything.
 
 For a more detailed description of the Magic Packet technology, see the
 AMD white paper available at the following addresses:
-    http://www.amd.com/products/npd/overview/20212.html (broken link)
-    http://support.amd.com/us/Embedded_TechDocs/20213.pdf (broken link)
-    https://web.archive.org/web/20000414213425/http://www.amd.com/products/npd/overview/20212.html (courtesy of the Internet Archive)
-    https://web.archive.org/web/20120113152607/http://support.amd.com/us/Embedded_TechDocs/20213.pdf (courtesy of the Internet Archive)
 
+* <http://www.amd.com/products/npd/overview/20212.html> (broken link)
+* <http://support.amd.com/us/Embedded_TechDocs/20213.pdf> (broken link)
+* <https://web.archive.org/web/20000414213425/http://www.amd.com/products/npd/overview/20212.html> (courtesy of the Internet Archive)
+* <https://web.archive.org/web/20120113152607/http://support.amd.com/us/Embedded_TechDocs/20213.pdf> (courtesy of the Internet Archive)
 
-#### 3. How is it implemented here ?
+## 3. How is it implemented here ?
 
 The scripts takes 2 arguments, the MAC-address of the NIC, and an IP
 address. The IP-address is tricky :
@@ -66,38 +62,37 @@ moment. The remote hosts will probably ignore the packet, but it has been
 seen by the listening NIC that's also on the same subnet, and it will turn
 on the computer... Feel free to experiment on this.
 
+## 4. Known-to-work hardware
 
-#### 4. Known-to-work hardware
+* 3Com 3c905B Cyclone 100baseTx on an Abit BP6 Motherboard;
+  (Ico Doornekamp)
 
- * 3Com 3c905B Cyclone 100baseTx on an Abit BP6 Motherboard;
-   (Ico Doornekamp)
+* Intel EtherExpress Pro (i82557) with management chip built onto an IBM
+  IntelliStation motherboard;
+  (Sean-Paul Rees)
 
- * Intel EtherExpress Pro (i82557) with management chip built onto an IBM
-   IntelliStation motherboard;
-   (Sean-Paul Rees)
+* Intel EtherExpress PRO/100+ (chipset 82559) with a PXE boot agent on
+  an ASUS P2B motherboard;
+  (José Pedro Oliveira)
 
- * Intel EtherExpress PRO/100+ (chipset 82559) with a PXE boot agent on
-   an ASUS P2B motherboard;
-   (José Pedro Oliveira)
+* Motherboard: ASUS TUSL2-C;
+  BIOS: Award BIOS / Power / Power Up Control / Wake On LAN or PCI Modem [Enable];
+  Network card: Intel Pro/100 S Desktop Adapter (chipset 82550)
+  with PXE boot agent v4.0.22;
+  (José Pedro Oliveira)
 
- * Motherboard: ASUS TUSL2-C;
-   BIOS: Award BIOS / Power / Power Up Control / Wake On LAN or PCI Modem [Enable];
-   Network card: Intel Pro/100 S Desktop Adapter (chipset 82550)
-   with PXE boot agent v4.0.22;
-   (José Pedro Oliveira)
+* Motherboard: ASUS TUSL2-C;
+  BIOS: Award BIOS / Power / Power Up Control / Wake On LAN or PCI Modem [Enable]
+  Network card: 3Com Fast Etherlink TX 10/100 PCI (3C905C-TXM)
+  with Managed PC Boot Agent (MBA) v4.30 (build 3)
+  Pre-boot eXecution Environment (PXE) v2.20;
+  (José Pedro Oliveira)
 
- * Motherboard: ASUS TUSL2-C;
-   BIOS: Award BIOS / Power / Power Up Control / Wake On LAN or PCI Modem [Enable]
-   Network card: 3Com Fast Etherlink TX 10/100 PCI (3C905C-TXM)
-   with Managed PC Boot Agent (MBA) v4.30 (build 3)
-   Pre-boot eXecution Environment (PXE) v2.20;
-   (José Pedro Oliveira)
+* nVidia Corporation nForce2 Ethernet Controller on ASUS and EPOX motherboards;
+  (Antoniu-George)
 
- * nVidia Corporation nForce2 Ethernet Controller on ASUS and EPOX motherboards;
-   (Antoniu-George)
-
- * Macs: All Powerbooks;
-   Energy Prefs: Wake on ethernet network Administrator access;
-   (Denis Ahrens)
+* Macs: All Powerbooks;
+  Energy Prefs: Wake on ethernet network Administrator access;
+  (Denis Ahrens)
 
 <!-- vim:set ai ts=4 sw=4 sts=4 et: -->
