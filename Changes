@@ -53,4 +53,11 @@ Revision history for Perl script wakeonlan.
 
 	- Minor documentation updates (including several typo corrections).
 
+0.42  2021-10-xx  jose.p.oliveira.oss@gmail.com
+
+	- Update project page
+	- Update main mainteiner's email address
+	- Minor documentation updates (links)
+
+
 # vim:set ai ts=4 sw=4:

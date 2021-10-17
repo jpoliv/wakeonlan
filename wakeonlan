@@ -1,8 +1,4 @@
 #!/usr/bin/perl -w
-#
-# $Id: wakeonlan,v 1.4.2.3 2005/01/27 16:03:54 jpo Exp $
-#
-######################################################################
 
 use strict;
 use Socket;
@@ -354,7 +350,7 @@ Using a file as source of hardware and IP addresses:
 
 =head1 AUTHOR
 
-José Pedro Oliveira <jpo@di.uminho.pt> maintaining and expanding original work done by Ico Doornekamp <ico@edd.dhs.org>.
+José Pedro Oliveira <jose.p.oliveira.oss@gmail.com> maintaining and expanding original work done by Ico Doornekamp <ico@edd.dhs.org>.
 
 =head1 COPYRIGHT
 
@@ -364,7 +360,7 @@ This is free software.  You may modify it and distribute it under Perl's Artisti
 
 =head1 SEE ALSO
 
-For more information regarding this script and Wakeonlan technology just check the following address http://gsd.di.uminho.pt/jpo/software/wakeonlan/.
+For more information regarding this script and Wakeonlan technology just check the project page at https://github.com/jpoliv/wakeonlan.
 
 =cut
 
