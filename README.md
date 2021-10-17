@@ -6,10 +6,10 @@ with comments or additions (good or bad).
     José Pedro Oliveira <jpo[at]di.uminho.pt>
     Ico Doornekamp <ico[at]edd.dhs.org>
 
-1. What is wakeonlan
-2. How does it work ?
-3. How is it implemented here ?
-4. Known to work hardware
+1. [What is wakeonlan](#1-what-is-wakeonlan)
+2. [How does WOL work ?](#2-how-does-wol-work)
+3. [How is it implemented here ?](#3-how-is-it-implemented-here)
+4. [Known to work hardware](#4-known-to-work-hardware)
 
 ## 1. What is wakeonlan
 
