@@ -17,7 +17,7 @@ WriteMakefile
                     'Test::Perl::Critic' => 0,
                     },
     ($] ge '5.005') ? (
-        'AUTHOR'    => 'José Pedro Oliveira <jpo@di.uminho.pt>',
+        'AUTHOR'    => 'José Pedro Oliveira <jose.p.oliveira.oss@gmail.com>',
         'ABSTRACT'  => "Script to send 'magic packets' to wakeable computers"
     ) : (
     ),

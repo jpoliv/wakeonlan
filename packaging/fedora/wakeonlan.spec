@@ -5,8 +5,8 @@ Summary:        Perl script to wake up computers through Magic Packets
 
 Group:          Development/Libraries
 License:        Artistic
-URL:            http://gsd.di.uminho.pt/jpo/software/wakeonlan/
-Source0:        http://gsd.di.uminho.pt/jpo/software/wakeonlan/wakeonlan-0.41.tar.gz
+URL:            https://github.com/jpoliv/wakeonlan/
+Source0:        https://github.com/jpoliv/wakeonlan/archive/%{name}-%{version}/%{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
