@@ -11,8 +11,8 @@ Authors:
 Table of contents:
 
 1. [What is wakeonlan](#1-what-is-wakeonlan)
-2. [How does WOL work ?](#2-how-does-wol-work)
-3. [How is it implemented here ?](#3-how-is-it-implemented-here)
+2. [How does WOL work?](#2-how-does-wol-work)
+3. [How is it implemented here?](#3-how-is-it-implemented-here)
 4. [Known to work hardware](#4-known-to-work-hardware)
 5. [References](#5-references)
 
@@ -21,7 +21,7 @@ Table of contents:
 This script sends 'magic packets' to wake-on-lan enabled ethernet
 adapters, in order to switch on the called PC.
 
-## 2. How does WOL work ?
+## 2. How does WOL work?
 
 WOL is based on the following principle :
 
@@ -44,7 +44,7 @@ anything.
 For a more detailed description of the Magic Packet technology, check the
 AMD resources listed in the [references](#5-references) section.
 
-## 3. How is it implemented here ?
+## 3. How is it implemented here?
 
 The scripts takes 2 arguments, the MAC-address of the NIC, and an IP
 address. The IP-address is tricky :
