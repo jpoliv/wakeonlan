@@ -2,7 +2,7 @@ Revision history for Perl script wakeonlan.
 
 0.10  2000-04-19  ico@edd.dhs.org
 
-	- Inital release. This works for me...
+	- Initial release. This works for me...
 	- Tested with 3Com 3c905B Cyclone 100baseTx
 
 
@@ -56,8 +56,8 @@ Revision history for Perl script wakeonlan.
 0.42  2021-10-xx  jose.p.oliveira.oss@gmail.com
 
 	- Update project page
-	- Update main mainteiner's email address
+	- Update main maintainers email address
 	- Minor documentation updates (links)
 
 
-# vim:set ai ts=4 sw=4:
+# vim:set ai ts=4 sw=4 sts=4:
