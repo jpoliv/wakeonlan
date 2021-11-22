@@ -21,6 +21,8 @@ WriteMakefile(
         'Test::Spelling'      => 0,
         'Test::Perl::Critic'  => 0,
     },
+    'NO_META'       => 1,
+    'NO_MYMETA'     => 1,
     # META_MERGE requires ExtUtils::MakeMaker 6.46+
     'META_MERGE'    => {
         'meta-spec' => { version => 2 },

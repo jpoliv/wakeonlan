@@ -1,5 +1,5 @@
 This file contains message digests of all files listed in MANIFEST,
-signed via the Module::Signature module, version 0.44.
+signed via the Module::Signature module, version 0.87.
 
 To verify the content in this distribution, first make sure you have
 Module::Signature installed, then type:
@@ -12,19 +12,22 @@ the distribution may already have been compromised, and you should
 not run its Makefile.PL or Build.PL.
 
 -----BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+Hash: RIPEMD160
 
-SHA1 d0aef405a4cd9014c7282def045be4bdaf2dc989 Changes
-SHA1 03b1ea4280c6d0f1f0f8b06990be3271e1f26009 MANIFEST
-SHA1 ccae8de92a2cd8bc7403e217532cf6e188a4f5d7 META.yml
-SHA1 9b72a0a4867ec107e298f19570dd44f41c94e13b Makefile.PL
-SHA1 2efea729ee31a6665a0fddcf30c406d469125c90 README
-SHA1 5d6930f66f58bf33c01de1e4760c2eed6c33170d examples/lab001.wol
-SHA1 03d093883fb557e4e2272600167c02a07f5768ce wakeonlan
+SHA256 23e5d48ddcfe2ca18d1b4b5f90a296e81abc7d9bd91cc193145e25508d9d7fbc Changes
+SHA256 1c648e7b6bffecf1aa79bd0f9671e15d63f669dbe5d6cddf0da659d339fd887e MANIFEST
+SHA256 52f20c3720e76a321e088728403317500f8628ea8d1420719a1d68b2791a286a Makefile.PL
+SHA256 c602240dcdc4d21f17330d5891975f15d49b59d7badd7d307929f3fbba1a92a7 README.md
+SHA256 d1277f55decc6ddd4e542d3eaeca7e7018f6890bf7068c97d6ce0bcd004024ca examples/lab001.wol
+SHA256 178958ed88487b2425e161ab425ef4a98ef56950e180d8a4ae1f9843cf4b18f9 t/81_perlcritic.t
+SHA256 6f0a33f6ef18a18e7e4593b672879ae5b35042f5bc63956bcf07d05339a5bea3 t/91_pod.t
+SHA256 2ffba038e8a2cf9280d42f847f74ac00b7426182c52e66eb28b3ade1618e9580 t/92_pod_coverage.t
+SHA256 03e56ed406a0fc22701cc59cecf4a1a54974d6c2fdfaef2532db95c20c420994 t/93_pod_spell.t
+SHA256 63f97ff7b09fc63c1b52f2f156e6f72ff76b7131371d193aba698e2819a33bb1 wakeonlan
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.6 (GNU/Linux)
 
-iD8DBQFB+RWXl0metZG9hRsRAudSAJ9zr//9ZzFks59rtjtEht8msX1whQCg7jLL
-5MXJHe/j/TYIX4onAByFDKk=
-=NCeu
+iHUEARYDAB0WIQQQwFsom3jQZ+/KFNTdfhW5/LYVNgUCYZr/+gAKCRDdfhW5/LYV
+NhTCAQDdtP2jiPsJmfHcUtGGIrsmAvtkIjxsz4W9EgyXb+DO2QD7B4wf2cxoDHC9
+XcpKQCOqs9g0B9HP0RREpgjf20kXQwM=
+=sGxS
 -----END PGP SIGNATURE-----

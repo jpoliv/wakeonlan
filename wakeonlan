@@ -5,7 +5,7 @@ use Socket;
 use Getopt::Long;
 use Pod::Usage;
 
-our $VERSION = '0.41_90';
+our $VERSION = '0.42';
 
 use constant {
 	PORT_MIN           => 0,
@@ -354,7 +354,7 @@ José Pedro Oliveira <jose.p.oliveira.oss@gmail.com> maintaining and expanding o
 
 =head1 COPYRIGHT
 
-Copyright (c) 2000-2009 José Pedro Oliveira.
+Copyright (c) 2000-2021 José Pedro Oliveira.
 
 This is free software.  You may modify it and distribute it under Perl's Artistic License.  Modified versions must be clearly indicated.
 

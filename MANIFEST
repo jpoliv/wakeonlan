@@ -4,7 +4,6 @@ MANIFEST
 README.md
 wakeonlan
 examples/lab001.wol
-META.yml                                 Module meta-data (added by MakeMaker)
 t/81_perlcritic.t
 t/91_pod.t
 t/92_pod_coverage.t
