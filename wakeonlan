@@ -5,7 +5,7 @@ use Socket;
 use Getopt::Long;
 use Pod::Usage;
 
-our $VERSION = '0.42';
+our $VERSION = '0.42_90';
 
 use constant {
 	PORT_MIN           => 0,
@@ -74,6 +74,19 @@ sub isValidHardwareAddress {
 
 	return 0;
 }
+
+
+sub getPairsOfHexDigits {
+    my $hwaddr = shift;
+
+    # Remove the supported delimiters ('-' and ':') in order to have a
+    # string with 12 hexadecimal digits
+    $hwaddr =~ s/[-:]//g;
+
+    # return a list with the 6 pairs of hex digits
+    return unpack('(a2)*', $hwaddr);
+}
+
 
 ######################################################################
 
@@ -149,14 +162,11 @@ sub loadFromFile {
 sub wake {
 	my ($sock, $hwaddr, $ipaddr, $port) = @_;
 	my ($raddr, $them, $pkt);
-	#
-	# Expects hardware address in canonical form (xx:xx:xx:xx:xx:xx)
-	#
 
 	#
 	# Generate the magic sequence
 	#
-	foreach (split /:/, $hwaddr) {
+	foreach (getPairsOfHexDigits($hwaddr)) {
 		$pkt .= chr(hex($_));
 	}
 	$pkt = chr(0xFF) x 6 . $pkt x 16;
