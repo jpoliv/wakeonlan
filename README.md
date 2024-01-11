@@ -100,7 +100,7 @@ on the computer... Feel free to experiment on this.
 ## 5. References
 
 * [AMD - Magic Packet Technology](https://web.archive.org/web/20000414213425/http://www.amd.com/products/npd/overview/20212.html) - Internet Archive link
-* [AMD - Magic Packet Technology - White paper](https://www.amd.com/system/files/TechDocs/20213.pdf)
+* [AMD - Magic Packet Technology - White paper](https://www.amd.com/content/dam/amd/en/documents/archived-tech-docs/white-papers/20213.pdf)
 * [Wireshark wiki - WakeOnLan](https://gitlab.com/wireshark/wireshark/-/wikis/WakeOnLan)
 * [Wikipedia - Wake-On-LAN](https://en.wikipedia.org/wiki/Wake-on-LAN)
 * [Old wakeonlan project page](https://web.archive.org/web/20140120212300/http://gsd.di.uminho.pt:80/jpo/software/wakeonlan/) - Internet Archive link
