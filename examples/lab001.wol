@@ -1,5 +1,5 @@
 #
-# This an example of a text file containing hardware addresses 
+# This an example of a text file containing hardware addresses
 #
 # File structure
 # --------------
@@ -19,4 +19,3 @@
 01:02:03:04:05:06	192.168.1.255		9
 07:09:09:0A:0B:0C	255.255.255.255
 0D:0E:0F:00:10:11
-

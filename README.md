@@ -1,5 +1,7 @@
 # wakeonlan
 
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+
 This is some premature documentation for this project. Feel free to contact
 with comments or additions (good or bad).
 
