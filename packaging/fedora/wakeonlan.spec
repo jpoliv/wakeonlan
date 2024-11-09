@@ -1,9 +1,9 @@
 Name:           wakeonlan
-Version:        0.42
+Version:        0.43
 Release:        1%{?dist}
 Summary:        Perl script to wake up computers through Magic Packets
 
-License:        Artistic
+License:        Artistic-2.0
 URL:            https://github.com/jpoliv/wakeonlan/
 Source0:        https://github.com/jpoliv/wakeonlan/archive/%{name}-%{version}/%{name}-%{version}.tar.gz
 
@@ -58,6 +58,11 @@ make test
 
 
 %changelog
+* Sat Nov xx 2024 Jose Pedro Oliveira - 0.43-1
+- Update to 0.43.
+- Update license to Artistic-2.0 (same as Artistic)
+  (https://www.perlfoundation.org/artistic-notes-20.html)
+
 * Mon Nov 22 2021 Jose Pedro Oliveira - 0.42-1
 - Update to 0.42.
 - Update specfile to follow recent Fedora's packaging guidelines

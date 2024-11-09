@@ -1,6 +1,7 @@
 # wakeonlan
 
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+[![License: Artistic-2.0](https://img.shields.io/badge/License-Artistic_2.0-0298c3.svg)](https://opensource.org/licenses/Artistic-2.0)
 
 This is some premature documentation for this project. Feel free to contact
 with comments or additions (good or bad).
@@ -16,7 +17,9 @@ Table of contents:
 2. [How does WOL work?](#2-how-does-wol-work)
 3. [How is it implemented here?](#3-how-is-it-implemented-here)
 4. [Known to work hardware](#4-known-to-work-hardware)
-5. [References](#5-references)
+5. [Contributing](#5-contributing)
+6. [Copyright and license](#6-copyright-and-license)
+7. [References](#7-references)
 
 ## 1. What is wakeonlan
 
@@ -44,7 +47,7 @@ expects no returning data, since the NIC only listens, and does not reply
 anything.
 
 For a more detailed description of the Magic Packet technology, check the
-AMD resources listed in the [references](#5-references) section.
+AMD resources listed in the [references](#7-references) section.
 
 ## 3. How is it implemented here?
 
@@ -99,7 +102,20 @@ on the computer... Feel free to experiment on this.
   Energy Prefs: Wake on ethernet network Administrator access;
   (Denis Ahrens)
 
-## 5. References
+## 5. Contributing
+
+Pull requests are welcome. For major changes, please open an issue first
+to discuss what you would like to change.
+
+## 6. Copyright and license
+
+Copyright (c) 2000-2024 José Pedro Oliveira.
+
+This is free software. You may modify it and distribute it under the
+[Perl's Artistic License 2.0](https://opensource.org/license/Artistic-2.0).
+Modified versions must be clearly indicated.
+
+## 7. References
 
 * [AMD - Magic Packet Technology](https://web.archive.org/web/20000414213425/http://www.amd.com/products/npd/overview/20212.html) - Internet Archive link
 * [AMD - Magic Packet Technology - White paper](https://www.amd.com/content/dam/amd/en/documents/archived-tech-docs/white-papers/20213.pdf)

@@ -63,7 +63,9 @@ Revision history for Perl script wakeonlan.
 0.43  2024-11-xx  jose.p.oliveira.oss@gmail.com
 
     - Really support MAC address formats with no delimiter or dash delimiters
-    - Add pre-commit hooks
     - Display the full POD documentation whenever -h or --help is specified
+    - Add pre-commit hooks
+    - Change license from Artistic to Artistic-2.0 (same thing; see
+      https://www.perlfoundation.org/artistic-notes-20.html)
 
 # vim:set ai et ts=4 sw=4 sts=4:
