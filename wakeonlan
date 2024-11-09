@@ -222,7 +222,7 @@ sub sendMagicPackets {
 #
 
 GetOptions(
-	"h|help"       => sub { pod2usage( -exitval => 0, -verbose => 1); },
+	"h|help"       => sub { pod2usage( -exitval => 0, -verbose => 2); },
 	"v|version"    => sub { print "wakeonlan $VERSION\n"; exit(0); },
 	"q|quiet"      => sub { $verbose = 0; },
 	"i|ip=s"       => \$DEFAULT_IP,
@@ -308,7 +308,7 @@ The 'magic packet' consists of 6 times 0xFF followed by 16 times the hardware ad
 
 =item B<-h, --help>
 
-Displays the help information.
+Displays the full POD documentation, which includes usage examples.
 
 =item B<-v, --version>
 
@@ -364,7 +364,7 @@ José Pedro Oliveira <jose.p.oliveira.oss@gmail.com> maintaining and expanding o
 
 =head1 COPYRIGHT
 
-Copyright (c) 2000-2021 José Pedro Oliveira.
+Copyright (c) 2000-2024 José Pedro Oliveira.
 
 This is free software.  You may modify it and distribute it under Perl's Artistic License.  Modified versions must be clearly indicated.
 
