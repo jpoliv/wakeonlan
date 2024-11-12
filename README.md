@@ -114,14 +114,13 @@ and execute the following commands:
 ```shell
 curl -RLOJ https://github.com/jpoliv/wakeonlan/archive/refs/tags/v0.42.tar.gz
 tar zxvf wakeonlan-0.42.tar.gz
-cd wakeonlan-0.42/
+cd wakeonlan-0.42
 perl Makefile.PL
 make
-make test # optional
 make install
 ```
 
-### 5.1 Downloading the standalone wakeonlan script from github
+### 5.2 Downloading the standalone wakeonlan script directly from GitHub
 
 On a Linux or on a MacOS system navigate to a directory like `~/.local/bin`
 and execute the following commands:
@@ -131,6 +130,11 @@ curl -RLOJ https://github.com/jpoliv/wakeonlan/raw/refs/heads/master/wakeonlan
 chmod a+x wakeonlan
 ./wakeonlan --help
 ```
+
+Note that the wakeonlan script uses an unversioned perl pathname on its shebang
+line ([`/usr/bin/perl`](https://github.com/jpoliv/wakeonlan/blob/master/wakeonlan#L1))
+that you may have to be adjust if your system has a versioned perl interpreter
+like `/usr/bin/perl5.38`.
 
 ## 6. Usage
 
