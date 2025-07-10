@@ -4,6 +4,7 @@ use strict;
 use Socket;
 use Getopt::Long;
 use Pod::Usage;
+use Time::HiRes qw ( sleep );
 
 our $VERSION = '0.42_90';
 
@@ -35,6 +36,7 @@ my $DEFAULT_PORT       = getservbyname('discard', 'udp');
 my $verbose            = 1;
 my $dryrun             = 0;
 my $filename           = '';
+my $delay              = 0.0;
 
 my @queue              = ();
 
@@ -208,6 +210,7 @@ sub sendMagicPackets {
 		wake($sock, $ref->[0], $ref->[1], $ref->[2]);
 
 		$stats{sent}++;
+		sleep($delay);
 	}
 
 	close $sock;
@@ -229,6 +232,7 @@ GetOptions(
 	"p|port=i"     => \$DEFAULT_PORT,
 	"f|file=s"     => \$filename,
 	"n|dry-run"    => sub { $dryrun = 1; },
+	"d|delay=f"    => \$delay,
 ) or pod2usage( -exitval => 1, -verbose => 1);
 
 
@@ -335,6 +339,10 @@ Quiet mode.
 =item B<-n, --dry-run>
 
 Print the commands that would be executed, but do not execute them.
+
+=item B<-d, --delay=seconds>
+
+Delay (in seconds) between sending magic packets. Can be a fractional second (e.g., 0.5).
 
 =back
 
