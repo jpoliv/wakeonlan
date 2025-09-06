@@ -81,6 +81,10 @@ sub isValidHardwareAddress {
 sub getPairsOfHexDigits {
     my $hwaddr = shift;
 
+    # Add leading zeros to single hex digits in 'canonical' and 'Windows' format
+    # (no effect for 'Hewlett-Packard' or 'Intel' format)
+    $hwaddr =~ s/(?<![\da-f])(?=[\da-f])(?!.[\da-f])/0/gi;
+
     # Remove the supported delimiters ('-' and ':') in order to have a
     # string with 12 hexadecimal digits
     $hwaddr =~ s/[-:]//g;
