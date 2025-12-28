@@ -1,6 +1,7 @@
 #!/usr/bin/perl -w
 
 use strict;
+use Net::hostent;
 use Socket;
 use Getopt::Long;
 use Pod::Usage;
@@ -92,15 +93,71 @@ sub getPairsOfHexDigits {
 
 ######################################################################
 
+sub host2HardwareAddress {
+	my ($host) = @_;
+	my $hwaddr;
+
+	my $ip_re = join('\.', ('([0-9]|[1-9][0-9]|1[0-9]{2}|2([0-4][0-9]|5[0-5]))') x 4);
+	my $ip_addr;
+	if ($host =~ m/^$ip_re$/) {
+		$ip_addr = $host;
+	} else {
+		my $h;
+		unless ($h = gethost($host)) {
+			warn "$host is not a hardware address and I could not resolve it as to an IP address.\n";
+			return;
+		}
+		$ip_addr = inet_ntoa($h->addr);
+	}
+	# look up ip in /etc/ethers
+	my $ETHERS;
+	unless (open ($ETHERS, '<', '/etc/ethers')) {
+		warn "$host is not a hardware address and I could not open /etc/ethers.\n";
+		return;
+	}
+	while (<$ETHERS>) {
+		if (($_ !~ m/^$/) && ($_ !~ m/^#/)) { # ignore comments
+			my ($mac, $ip);
+			($mac, $ip) = split(' ', $_, 3);
+			if ($ip =~ m/^$ip$/) {
+				if ($ip eq $ip_addr or $ip eq $host) {
+				    $hwaddr = $mac;
+				    last;
+				}
+				next;
+			} else {
+				my $h2;
+				unless ($h2 = gethost($ip)) {
+					next;
+				}
+				if (inet_ntoa($h2->addr) eq $ip_addr) {
+					$hwaddr = $mac;
+					last;
+				}
+			}
+		}
+	}
+	close ($ETHERS);
+	unless (defined($hwaddr)) {
+		warn "Could not find $host in /etc/ethers\n";
+		return;
+	}
+	return $hwaddr;
+}
+
 sub loadFromCommandLine {
 
 	for my $arg (@_) {
 		$stats{total}++;
 
 		if (! isValidHardwareAddress($arg) ) {
-			warn "Invalid hardware address: $arg\n";
-			$stats{invalid}++;
-			next;
+			if (my $hwaddr = host2HardwareAddress($arg)) {
+				$arg = $hwaddr;
+			} else {
+				warn "Invalid hardware address: $arg\n";
+				$stats{invalid}++;
+				next;
+			}
 		}
 
 		$stats{valid}++;
@@ -180,7 +237,7 @@ sub wake {
 	# Patch by Eugenio Jarosiewicz <ej0 at mac.com>
 	# $raddr = inet_aton($ipaddr);
 	#
-	$raddr = gethostbyname($ipaddr);
+	$raddr = gethostbyname($ipaddr)->addr;
 	$them = pack_sockaddr_in($port, $raddr);
 
 	print "Sending magic packet to $ipaddr:$port with payload $hwaddr\n"
