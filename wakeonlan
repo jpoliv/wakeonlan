@@ -298,7 +298,7 @@ wakeonlan - Perl script to wake up computers
 
 =head1 SYNOPSIS
 
-wakeonlan [-h|--help] [-v|--version] [-q|--quiet] [-n|--dry-run] [-i|--ip IP_address] [-p|--port port] [-f|--file file_name] [[hardware_address] ...]
+wakeonlan [-h|--help] [-v|--version] [-q|--quiet] [-n|--dry-run] [-i|--ip IP_address] [-p|--port port] [-f|--file file_name] [-d|--delay seconds] [[hardware_address] ...]
 
 =head1 DESCRIPTION
 
