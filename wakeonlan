@@ -11,6 +11,7 @@ our $VERSION = '0.42_90';
 use constant {
 	PORT_MIN           => 0,
 	PORT_MAX           => 65535,
+	PORT_DISCARD       => 9,
 };
 
 #
@@ -31,7 +32,10 @@ our @hwaddr_regexs = (
 );
 
 my $DEFAULT_IP         = '255.255.255.255';
-my $DEFAULT_PORT       = getservbyname('discard', 'udp');
+
+# Systems with a trimmed down /etc/services may not list the discard
+# service, in which case fall back to its well known port number.
+my $DEFAULT_PORT       = getservbyname('discard', 'udp') // PORT_DISCARD;
 
 my $verbose            = 1;
 my $dryrun             = 0;
