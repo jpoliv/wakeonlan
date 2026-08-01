@@ -350,6 +350,36 @@ Delay (in seconds) between sending magic packets. Can be a fractional second (e.
 
 =back
 
+=head1 EXIT STATUS
+
+=over
+
+=item B<0>
+
+Success. Either the queued magic packets were all sent, or the requested help or version information was displayed.
+
+=item B<1>
+
+Invalid command line options.
+
+=item B<2>
+
+Invalid default destination port (see B<-p, --port>).
+
+=item B<3>
+
+Invalid default destination IP address (see B<-i, --ip>).
+
+=item B<4>
+
+The file given to B<-f, --file> is missing or is not a plain file.
+
+=back
+
+Invalid records -- hardware addresses, IP addresses or ports that fail validation -- are reported on the standard error and skipped, and on their own do not change the exit status: a run in which every record is rejected still exits with 0.
+
+Any other non-zero exit status denotes an unexpected runtime failure, such as a file that cannot be opened or a socket that cannot be created. Those failures come with a message on the standard error and the status is the underlying system error number.
+
 =head1 EXAMPLES
 
 Using the limited broadcast address (255.255.255.255):

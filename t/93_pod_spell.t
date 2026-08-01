@@ -5,7 +5,7 @@ use Test::Spelling;
 
 add_stopwords(qw(José Oliveira));
 add_stopwords(qw(Ico Doornekamp));
-add_stopwords(qw(ARP IP UDP NIC));
+add_stopwords(qw(ARP IP ip UDP NIC));
 add_stopwords(qw(lan ethernet subnet));
 add_stopwords(qw(subdirectory));
 add_stopwords(qw(WOL wol wakeonlan wakeable));
