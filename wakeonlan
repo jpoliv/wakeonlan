@@ -6,7 +6,7 @@ use Getopt::Long;
 use Pod::Usage;
 use Time::HiRes qw ( sleep );
 
-our $VERSION = '0.42_90';
+our $VERSION = '0.42_91';
 
 use constant {
 	PORT_MIN           => 0,
@@ -410,7 +410,7 @@ José Pedro Oliveira <jose.p.oliveira.oss@gmail.com> maintaining and expanding o
 
 =head1 COPYRIGHT
 
-Copyright (c) 2000-2024 José Pedro Oliveira.
+Copyright (c) 2000-2026 José Pedro Oliveira.
 
 This is free software.  You may modify it and distribute it under the Perl's Artistic License 2.0.  Modified versions must be clearly indicated.
 

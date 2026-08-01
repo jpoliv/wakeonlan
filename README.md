@@ -167,7 +167,7 @@ to discuss what you would like to change.
 
 ## 8. Copyright and license
 
-Copyright (c) 2000-2024 José Pedro Oliveira.
+Copyright (c) 2000-2026 José Pedro Oliveira.
 
 This is free software. You may modify it and distribute it under the
 [Perl's Artistic License 2.0](https://opensource.org/license/Artistic-2.0).
