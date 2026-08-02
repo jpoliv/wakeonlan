@@ -19,16 +19,16 @@ use constant {
 #
 our @hwaddr_regexs = (
 	# xx:xx:xx:xx:xx:xx (canonical)
-	'^(?:[\da-f]{1,2}:){5}[\da-f]{1,2}$',
+	qr/^(?:[\da-f]{1,2}:){5}[\da-f]{1,2}$/i,
 
 	# xx-xx-xx-xx-xx-xx (Windows)
-	'^(?:[\da-f]{1,2}-){5}[\da-f]{1,2}$',
+	qr/^(?:[\da-f]{1,2}-){5}[\da-f]{1,2}$/i,
 
 	# xxxxxx-xxxxxx (Hewlett-Packard switches)
-	'^[\da-f]{6}-[\da-f]{6}$',
+	qr/^[\da-f]{6}-[\da-f]{6}$/i,
 
 	# xxxxxxxxxxxx (Intel Landesk)
-	'^[\da-f]{12}$',
+	qr/^[\da-f]{12}$/i,
 );
 
 my $DEFAULT_IP         = '255.255.255.255';
@@ -75,7 +75,7 @@ sub isValidHardwareAddress {
 	my $hwaddr = shift;
 
 	foreach my $re (@hwaddr_regexs) {
-		return 1 if ($hwaddr =~ m/$re/i);
+		return 1 if ($hwaddr =~ $re);
 	}
 
 	return 0;
