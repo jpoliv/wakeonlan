@@ -80,31 +80,3 @@ jobs:
           path: |
             $RPMBUILD_DIR/SRPMS/*.src.rpm
             $RPMBUILD_DIR/RPMS/**/*.rpm
-
-  copr-build:
-    name: Submit SRPM to Copr (optional)
-    needs: build-rpm
-    runs-on: ubuntu-latest
-    if: ${{ secrets.COPR_API_TOKEN != '' && secrets.COPR_OWNER != '' && secrets.COPR_PROJECT != '' }}
-    steps:
-      - name: Download SRPM artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: wakeonlan-rpms
-          path: ./artifacts
-
-      - name: Install copr-cli
-        run: |
-          python3 -m pip install --user copr-cli
-          export PATH=$HOME/.local/bin:$PATH
-          copr-cli --version
-
-      - name: Submit SRPM to Copr
-        env:
-          COPR_CLI_PASSWORD: ${{ secrets.COPR_API_TOKEN }}
-          COPR_OWNER: ${{ secrets.COPR_OWNER }}
-          COPR_PROJECT: ${{ secrets.COPR_PROJECT }}
-        run: |
-          export PATH=$HOME/.local/bin:$PATH
-          SRPM=$(ls artifacts/*.src.rpm | head -n1)
-          copr-cli build $COPR_OWNER/$COPR_PROJECT "$SRPM"
