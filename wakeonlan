@@ -258,7 +258,7 @@ if (! isValidIPAddress($DEFAULT_IP)) {
 	exit(3);
 }
 
-if ($filename and ! -f $filename) {
+if ($filename and ! (-f $filename or -p $filename)) {
 	warn "Invalid filename: $filename\n";
 	exit(4);
 }
