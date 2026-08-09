@@ -1,0 +1,110 @@
+name: Build Fedora SRPM/RPM
+
+on:
+  push:
+    tags:
+      - 'v*'           # trigger on tags like v0.50
+  workflow_dispatch:
+
+env:
+  SPEC_PATH: packaging/fedora/wakeonlan.spec
+  RPMBUILD_DIR: ${{ github.workspace }}/rpmbuild
+
+jobs:
+  build-rpm:
+    name: Build SRPM and RPM
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:stable
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine version from tag
+        id: ver
+        run: |
+          # GITHUB_REF_NAME is like v0.50; strip leading 'v' if present
+          TAG="${GITHUB_REF_NAME#v}"
+          echo "version=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Install build tools
+        run: |
+          dnf -y update
+          dnf -y install rpm-build rpmdevtools make git rpmlint \
+            perl-ExtUtils-MakeMaker perl-Test-Simple perl-Test-Pod \
+            perl-Test-Pod-Coverage perl-Test-Spelling perl-Perl-Critic \
+            perl-generators perl-interpreter
+          dnf -y clean all
+
+      - name: Create upstream tarball from tag
+        run: |
+          VERSION=${{ steps.ver.outputs.version }}
+          NAME=wakeonlan
+          mkdir -p dist
+          # ensure we create a tarball with a top-level directory name like wakeonlan-<version>/
+          git archive --format=tar.gz --prefix=${NAME}-${VERSION}/ -o dist/${NAME}-${VERSION}.tar.gz HEAD
+
+      - name: Prepare rpmbuild tree and spec
+        run: |
+          VERSION=${{ steps.ver.outputs.version }}
+          mkdir -p $RPMBUILD_DIR/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+          cp dist/wakeonlan-${VERSION}.tar.gz $RPMBUILD_DIR/SOURCES/
+          cp $SPEC_PATH $RPMBUILD_DIR/SPECS/wakeonlan.spec
+          # Update Version: line in the spec to match tag (if you prefer to keep spec version, remove this line)
+          sed -i "s/^Version:.*/Version: ${VERSION}/" $RPMBUILD_DIR/SPECS/wakeonlan.spec
+          # Optionally ensure %license is present; if you prefer a different approach remove this
+          grep -q '^%license LICENSE' $RPMBUILD_DIR/SPECS/wakeonlan.spec || \
+            sed -i "/^%files/a %license LICENSE" $RPMBUILD_DIR/SPECS/wakeonlan.spec || true
+
+      - name: Build SRPM
+        run: |
+          rpmbuild --define "_topdir $RPMBUILD_DIR" -bs $RPMBUILD_DIR/SPECS/wakeonlan.spec
+          ls -l $RPMBUILD_DIR/SRPMS
+
+      - name: Build binary RPMs
+        run: |
+          rpmbuild --define "_topdir $RPMBUILD_DIR" -ba $RPMBUILD_DIR/SPECS/wakeonlan.spec
+          ls -lR $RPMBUILD_DIR/RPMS || true
+
+      - name: Run rpmlint on built RPMs (optional check)
+        run: |
+          set -e
+          find $RPMBUILD_DIR/RPMS -type f -name '*.rpm' -print0 | xargs -r -0 rpmlint || true
+
+      - name: Upload SRPM and RPM artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: wakeonlan-rpms
+          path: |
+            $RPMBUILD_DIR/SRPMS/*.src.rpm
+            $RPMBUILD_DIR/RPMS/**/*.rpm
+
+  copr-build:
+    name: Submit SRPM to Copr (optional)
+    needs: build-rpm
+    runs-on: ubuntu-latest
+    if: ${{ secrets.COPR_API_TOKEN != '' && secrets.COPR_OWNER != '' && secrets.COPR_PROJECT != '' }}
+    steps:
+      - name: Download SRPM artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: wakeonlan-rpms
+          path: ./artifacts
+
+      - name: Install copr-cli
+        run: |
+          python3 -m pip install --user copr-cli
+          export PATH=$HOME/.local/bin:$PATH
+          copr-cli --version
+
+      - name: Submit SRPM to Copr
+        env:
+          COPR_CLI_PASSWORD: ${{ secrets.COPR_API_TOKEN }}
+          COPR_OWNER: ${{ secrets.COPR_OWNER }}
+          COPR_PROJECT: ${{ secrets.COPR_PROJECT }}
+        run: |
+          export PATH=$HOME/.local/bin:$PATH
+          SRPM=$(ls artifacts/*.src.rpm | head -n1)
+          copr-cli build $COPR_OWNER/$COPR_PROJECT "$SRPM"
