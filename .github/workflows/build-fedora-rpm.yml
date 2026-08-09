@@ -15,7 +15,7 @@ jobs:
     name: Build SRPM and RPM
     runs-on: ubuntu-latest
     container:
-      image: fedora:stable
+      image: fedora:latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
