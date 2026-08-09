@@ -21,11 +21,9 @@ BuildRequires:  perl(Test::Pod)
 BuildRequires:  perl(Test::Pod::Coverage)
 BuildRequires:  perl(Test::Spelling)
 
-Requires:       perl(:MODULE_COMPAT_%(eval "`perl -V:version`"; echo $version))
-
 
 %description
-This script sends 'magic packets' to wake-on-lan enabled ethernet
+This script sends 'magic packets' to wake-on-lan enabled Ethernet
 adapters and motherboards, in order to switch on the called PC.
 
 
