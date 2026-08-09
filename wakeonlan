@@ -377,7 +377,7 @@ Invalid default destination IP address (see B<-i, --ip>).
 
 =item B<4>
 
-The file given to B<-f, --file> is missing or is not a plain file.
+The file given to B<-f, --file> is missing or is not a plain file or a FIFO (named pipe).
 
 =back
 
