@@ -62,7 +62,7 @@ Revision history for Perl script wakeonlan.
 `
 0.43  2026-08-xx  jose.p.oliveira.oss@gmail.com
 
-    - Change license from Artistic to Artistic-2.0 (same thing; see
+    - docs: change license from Artistic to Artistic-2.0 (same thing; see
       https://www.perlfoundation.org/artistic-notes-20.html)
     - build: add pre-commit hooks
     - fix: display the full POD documentation whenever -h or --help is specified
@@ -70,8 +70,11 @@ Revision history for Perl script wakeonlan.
     - fix: really support MAC address formats with no delimiter or dash delimiters
     - fix: fall back to port 9 when the discard service is unknown
     - fix: normalize single hex digit fields to two hex digits
+    - fix: accept named pipes (FIFOs) as valid --file input
     - test: check the magic packets sent for every hardware address format
     - docs: add the -d|--delay option to the POD synopsis
     - docs: add an EXIT STATUS section to the POD documentation
+    - refactor: precompile the hardware address regexes with qr//
+    - chore: specfile updates
 
 # vim:set ai et ts=4 sw=4 sts=4:
