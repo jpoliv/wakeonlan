@@ -122,7 +122,7 @@ sub loadFromFile {
 	my $filename = shift;
 	my ($hwaddr, $ipaddr, $port);
 
-	open (my $FILE, '<', $filename) or die "open : $!";
+	open (my $FILE, '<', $filename) or die "open '$filename' for reading: $!";
 	while(<$FILE>) {
 		next if /^\s*#/;		# ignore comment lines
 		next if /^\s*$/;		# ignore empty lines
@@ -195,7 +195,7 @@ sub wake {
 	print "Sending magic packet to $ipaddr:$port with payload $hwaddr\n"
 		if $verbose;
 
-	#send($sock, $pkt, 0, $them) or die "send : $!";
+	# send($sock, $pkt, 0, $them) or die "send: $!";
 	send($sock, $pkt, 0, $them) unless $dryrun;
 
 }
@@ -211,8 +211,8 @@ sub sendMagicPackets {
 	my $sock;
 	my $proto = getprotobyname('udp');
 
-	socket($sock, AF_INET, SOCK_DGRAM, $proto) or die "socket : $!";
-	setsockopt($sock, SOL_SOCKET, SO_BROADCAST, 1) or die "setsockopt : $!";
+	socket($sock, AF_INET, SOCK_DGRAM, $proto) or die "socket(AF_INET,SOCK_DGRAM): $!";
+	setsockopt($sock, SOL_SOCKET, SO_BROADCAST, 1) or die "setsockopt(SO_BROADCAST): $!";
 
 	for my $ref (@queue) {
 
