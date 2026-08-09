@@ -1,5 +1,5 @@
 Name:           wakeonlan
-Version:        0.43
+Version:        0.50
 Release:        1%{?dist}
 Summary:        Perl script to wake up computers through Magic Packets
 
@@ -53,8 +53,8 @@ make test
 
 
 %changelog
-* Sun Aug xx 2026 Jose Pedro Oliveira - 0.43-1
-- Update to 0.43.
+* Mon Aug 10 2026 Jose Pedro Oliveira - 0.50-1
+- Update to 0.50.
 - Update license to Artistic-2.0 (same as Artistic)
   (https://www.perlfoundation.org/artistic-notes-20.html)
 

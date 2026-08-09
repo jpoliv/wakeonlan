@@ -60,7 +60,7 @@ Revision history for Perl script wakeonlan.
     - Minor documentation updates (links)
     - Test suite (developer)
 `
-0.43  2026-08-xx  jose.p.oliveira.oss@gmail.com
+0.50  2026-08-10  jose.p.oliveira.oss@gmail.com
 
     - docs: change license from Artistic to Artistic-2.0 (same thing; see
       https://www.perlfoundation.org/artistic-notes-20.html)
@@ -76,5 +76,6 @@ Revision history for Perl script wakeonlan.
     - docs: add an EXIT STATUS section to the POD documentation
     - refactor: precompile the hardware address regexes with qr//
     - chore: specfile updates
+    - ci(build_fredora_rpm): add GitHub Action to build Fedora SRPM/RPM
 
 # vim:set ai et ts=4 sw=4 sts=4:
