@@ -5,7 +5,7 @@ Summary:        Perl script to wake up computers through Magic Packets
 
 License:        Artistic-2.0
 URL:            https://github.com/jpoliv/wakeonlan/
-Source0:        https://github.com/jpoliv/wakeonlan/archive/%{name}-%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/jpoliv/wakeonlan/archive/refs/tags/v%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -13,14 +13,12 @@ BuildRequires:  make
 BuildRequires:  perl-generators
 BuildRequires:  perl-interpreter
 BuildRequires:  perl(ExtUtils::MakeMaker)
-BuildRequires:  perl(warnings)
-BuildRequires:  perl(strict)
 
 # Test suite
 BuildRequires:  perl(Test::More)
 BuildRequires:  perl(Test::Perl::Critic)
 BuildRequires:  perl(Test::Pod)
-BuildRequires:  perl(Test::Pod)
+BuildRequires:  perl(Test::Pod::Coverage)
 BuildRequires:  perl(Test::Spelling)
 
 Requires:       perl(:MODULE_COMPAT_%(eval "`perl -V:version`"; echo $version))
@@ -32,7 +30,7 @@ adapters and motherboards, in order to switch on the called PC.
 
 
 %prep
-%setup -q
+%autosetup
 
 
 %build
@@ -51,14 +49,13 @@ make test
 
 
 %files
-%defattr(-,root,root,-)
 %doc Changes README.md examples/
-%{_bindir}/*
-%{_mandir}/man1/*.1*
+%{_bindir}/wakeonlan
+%{_mandir}/man1/wakeonlan.1*
 
 
 %changelog
-* Sat Nov xx 2024 Jose Pedro Oliveira - 0.43-1
+* Sun Aug xx 2026 Jose Pedro Oliveira - 0.43-1
 - Update to 0.43.
 - Update license to Artistic-2.0 (same as Artistic)
   (https://www.perlfoundation.org/artistic-notes-20.html)
