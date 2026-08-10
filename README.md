@@ -112,9 +112,9 @@ On a Linux or on a MacOS system navigate to a temporary directory like `/tmp`
 and execute the following commands:
 
 ```shell
-curl -RLOJ https://github.com/jpoliv/wakeonlan/archive/refs/tags/v0.42.tar.gz
-tar zxvf wakeonlan-0.42.tar.gz
-cd wakeonlan-0.42
+curl -RLOJ https://github.com/jpoliv/wakeonlan/archive/refs/tags/v0.50.tar.gz
+tar zxvf wakeonlan-0.50.tar.gz
+cd wakeonlan-0.50
 perl Makefile.PL
 make
 make install
