@@ -66,10 +66,8 @@ jobs:
           cp dist/wakeonlan-${VERSION}.tar.gz $RPMBUILD_DIR/SOURCES/
           cp $SPEC_PATH $RPMBUILD_DIR/SPECS/wakeonlan.spec
           # Update Version: line in the spec to match tag (if you prefer to keep spec version, remove this line)
-          sed -i "s/^Version:.*/Version: ${VERSION}/" $RPMBUILD_DIR/SPECS/wakeonlan.spec
-          # Optionally ensure %license is present; if you prefer a different approach remove this
-          grep -q '^%license LICENSE' $RPMBUILD_DIR/SPECS/wakeonlan.spec || \
-            sed -i "/^%files/a %license LICENSE" $RPMBUILD_DIR/SPECS/wakeonlan.spec || true
+          # sed -i "s/^Version:.*/Version: ${VERSION}/" $RPMBUILD_DIR/SPECS/wakeonlan.spec
+          ls -l $RPMBUILD_DIR/SOURCES/ $RPMBUILD_DIR/SPECS/
 
       - name: Build SRPM
         run: |

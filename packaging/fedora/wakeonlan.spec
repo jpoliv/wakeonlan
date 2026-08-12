@@ -5,7 +5,9 @@ Summary:        Perl script to wake up computers through Magic Packets
 
 License:        Artistic-2.0
 URL:            https://github.com/jpoliv/wakeonlan/
-Source0:        https://github.com/jpoliv/wakeonlan/archive/refs/tags/v%{version}.tar.gz
+# Source0:        https://github.com/jpoliv/wakeonlan/archive/refs/tags/v%{version}.tar.gz
+# For the GitHub action
+Source0:        %{name}-%{version}.tar.gz
 
 BuildArch:      noarch
 
