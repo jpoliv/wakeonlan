@@ -95,4 +95,4 @@ jobs:
           name: wakeonlan-rpms
           path: |
             ${{ env.RPMBUILD_DIR }}/SRPMS/*.src.rpm
-            ${{ env.RPMBUILD_DIR }}/RPMS/**/*.rpm
+            ${{ env.RPMBUILD_DIR }}/RPMS/noarch/*.rpm
