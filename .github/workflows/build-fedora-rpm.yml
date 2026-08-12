@@ -5,6 +5,11 @@ on:
     tags:
       - 'v*'           # trigger on tags like v0.50
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Optional override for the version (e.g. 0.50). When set, this is used instead of deriving the version from a git tag.'
+        required: false
+        default: ''
 
 env:
   SPEC_PATH: packaging/fedora/wakeonlan.spec
@@ -22,11 +27,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Determine version from tag
+      - name: Determine version from tag or input
         id: ver
         run: |
-          # GITHUB_REF_NAME is like v0.50; strip leading 'v' if present
+          # If the workflow was run with an input 'version' (workflow_dispatch), use it.
+          # Otherwise try to derive the version from the tag name (GITHUB_REF_NAME).
+          INPUT_VERSION="${{ github.event.inputs.version }}"
+          # When triggered by push:tags, GITHUB_REF_NAME is available (e.g. "v0.50").
           TAG="${GITHUB_REF_NAME#v}"
+          if [ -n "$INPUT_VERSION" ]; then
+            TAG="$INPUT_VERSION"
+          fi
           echo "version=$TAG" >> $GITHUB_OUTPUT
 
       - name: Install build tools
