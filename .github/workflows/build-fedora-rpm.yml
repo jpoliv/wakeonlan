@@ -23,7 +23,7 @@ jobs:
       image: fedora:latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -90,7 +90,7 @@ jobs:
           find $RPMBUILD_DIR/RPMS -type f -name '*.rpm' -print0 | xargs -r -0 rpmlint || true
 
       - name: Upload SRPM and RPM artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: wakeonlan-rpms
           path: |
