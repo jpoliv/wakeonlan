@@ -44,9 +44,14 @@ jobs:
         run: |
           dnf -y update
           dnf -y install rpm-build rpmdevtools make git rpmlint \
-            perl-ExtUtils-MakeMaker perl-Test-Simple perl-Test-Pod \
-            perl-Test-Pod-Coverage perl-Test-Spelling perl-Perl-Critic \
-            perl-generators perl-interpreter
+            perl-ExtUtils-MakeMaker \
+            perl-Test-Simple \
+            perl-Test-Pod \
+            perl-Test-Pod-Coverage \
+            perl-Test-Spelling \
+            perl-Test-Perl-Critic \
+            perl-generators \
+            perl-interpreter
           dnf -y clean all
 
       - name: Create upstream tarball from tag
