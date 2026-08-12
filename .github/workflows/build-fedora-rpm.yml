@@ -54,8 +54,10 @@ jobs:
           VERSION=${{ steps.ver.outputs.version }}
           NAME=wakeonlan
           mkdir -p dist
-          # ensure we create a tarball with a top-level directory name like wakeonlan-<version>/
-          git archive --format=tar.gz --prefix=${NAME}-${VERSION}/ -o dist/${NAME}-${VERSION}.tar.gz HEAD
+          TAG="v${VERSION}"
+          # Download the GitHub release archive for the tag (works even without .git in workspace)
+          curl -L -o dist/${NAME}-${VERSION}.tar.gz \
+            https://github.com/${{ github.repository }}/archive/refs/tags/${TAG}.tar.gz
 
       - name: Prepare rpmbuild tree and spec
         run: |
